@@ -1,0 +1,5 @@
+,true,pred,p_max,histology,who_grade,age,purity,batch_tss,idh_status,codel_1p19q,subtype_7
+TCGA-26-5133,IDHwt,IDHmut-non-codel,0.593528,glioblastoma,G4,59.0,0.88,26,WT,non-codel,LGm6-GBM
+TCGA-P5-A731,IDHmut-non-codel,IDHwt,0.41225567,oligoastrocytoma,G2,59.0,0.84,P5,Mutant,non-codel,G-CIMP-high
+TCGA-CS-5394,IDHmut-non-codel,IDHmut-codel,0.9251766,astrocytoma,G3,40.0,0.92,CS,Mutant,non-codel,Codel
+TCGA-HT-8113,IDHmut-non-codel,IDHmut-codel,0.50317544,oligodendroglioma,G2,49.0,0.34,HT,Mutant,non-codel,Codel

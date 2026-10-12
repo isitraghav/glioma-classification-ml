@@ -1,0 +1,7 @@
+model,method,candidates,best_cv_f1_macro,seconds,best_params
+logreg,random search,25,0.9843976178129216,174,"{""feat__k_genes"": 1000, ""model__C"": 0.0070689749506246055, ""model__l1_ratio"": 0.18182496720710062}"
+svm_linear,random search,25,0.9848804954153384,34,"{""feat__k_genes"": 2000, ""model__estimator__C"": 0.09609812947036396}"
+svm_rbf,random search,25,0.9848804954153384,69,"{""feat__k_genes"": 2000, ""model__estimator__C"": 153.52246941973468, ""model__estimator__gamma"": 5.4167545832474595e-05}"
+knn,random search,25,0.9663119278267682,17,"{""feat__k_genes"": 4000, ""model__n_neighbors"": 6, ""model__p"": 2, ""model__weights"": ""distance"", ""reduce__n_components"": 10}"
+tree,random search,25,0.9568241215702512,17,"{""feat__k_genes"": 2000, ""model__ccp_alpha"": 0.015882027186184103, ""model__criterion"": ""gini"", ""model__max_depth"": 9, ""model__min_samples_leaf"": 3}"
+random_forest,random search,15,0.9797309346123534,85,"{""feat__k_genes"": 2000, ""model__max_depth"": 10, ""model__max_features"": 0.2, ""model__min_samples_leaf"": 4}"

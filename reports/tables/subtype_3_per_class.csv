@@ -1,0 +1,7 @@
+,precision,recall,f1-score,support
+IDHwt,0.9783,0.9783,0.9783,46.0
+IDHmut-non-codel,0.9796,0.9412,0.96,51.0
+IDHmut-codel,0.9444,1.0,0.9714,34.0
+accuracy,0.9695,0.9695,0.9695,0.9695
+macro avg,0.9674,0.9731,0.9699,131.0
+weighted avg,0.97,0.9695,0.9694,131.0

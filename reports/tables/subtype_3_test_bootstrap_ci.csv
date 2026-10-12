@@ -1,0 +1,7 @@
+model,f1_macro_ci_lo,balanced_accuracy_ci_lo,roc_auc_ci_lo,f1_macro_ci_hi,balanced_accuracy_ci_hi,roc_auc_ci_hi
+logreg,0.9387,0.9454,0.9747,0.9938,0.9948,1.0
+svm_linear,0.9622,0.966,0.9837,1.0,1.0,1.0
+svm_rbf,0.9622,0.966,0.984,1.0,1.0,1.0
+knn,0.8956,0.8944,0.99,0.9775,0.9765,0.9996
+tree,0.9222,0.9252,0.9496,0.9864,0.9874,0.9919
+random_forest,0.9518,0.9561,0.9856,1.0,1.0,1.0

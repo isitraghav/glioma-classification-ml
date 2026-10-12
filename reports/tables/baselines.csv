@@ -1,0 +1,3 @@
+pmid,study,metric,value,quote
+36430631,"Tasci et al. 2022, Int J Mol Sci — hierarchical voting feature selection + soft-voting ensemble (source of UCI #759)",accuracy (TCGA LGG vs GBM),0.87606,achieves 87.606% and 79.668% accuracy rates on TCGA
+37760597,"Tasci et al. 2023 (GradWise), Cancers — mRMR + LASSO hybrid feature selection",accuracy (TCGA LGG vs GBM),0.87007,accuracy rate of 87.007% with 13 features and an accuracy rate of 80.412% with five features on the TCGA

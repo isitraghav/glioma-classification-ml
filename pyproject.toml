@@ -1,0 +1,63 @@
+[project]
+name = "glioma"
+version = "0.1.0"
+description = "Glioma (brain cancer) molecular subtype classification from TCGA/GDC and GEO data"
+readme = "README.md"
+authors = [
+    { name = "Raghav Yadav", email = "152066468+isitraghav@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.4",
+    "openpyxl>=3.1.5",
+    "pandas>=3.0.6",
+    "pyarrow>=26.0.0",
+    "pyyaml>=6.0.3",
+    "requests>=2.34.2",
+    "scikit-learn>=1.9.1",
+    "scipy>=1.18.1",
+    "seaborn>=0.13.2",
+    "shap>=0.53.0",
+    "statsmodels>=0.15.0",
+    "tabulate>=0.10.0",
+    "tqdm>=4.70.1",
+]
+
+[project.scripts]
+glioma-download = "glioma.download:main"
+glioma-literature = "glioma.literature:main"
+glioma-build = "glioma.build_dataset:main"
+glioma-eda = "glioma.eda:main"
+glioma-train = "glioma.train:main"
+glioma-regularization = "glioma.regularization:main"
+glioma-tuning-plots = "glioma.tuning_analysis:main"
+glioma-evaluate = "glioma.evaluate:main"
+glioma-external = "glioma.external:main"
+glioma-report = "glioma.report:main"
+glioma-predict = "glioma.predict:main"
+glioma-all = "glioma.pipeline:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::FutureWarning", "ignore::DeprecationWarning"]
+
+[build-system]
+requires = ["uv_build>=0.12.21,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["B905"]  # zip() without strict= is intentional for equal-length plotting iterables
+
+[tool.ruff.lint.per-file-ignores]
+"src/glioma/report.py" = ["E501"]  # long markdown prose lines in generated report text

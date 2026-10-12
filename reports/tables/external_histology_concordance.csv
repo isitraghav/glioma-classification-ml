@@ -1,0 +1,17 @@
+cohort,model,histology,n,IDHwt,IDHmut-non-codel,IDHmut-codel
+gse107850,logreg,astrocytoma,51,0.059,0.863,0.078
+gse107850,logreg,oligoastrocytoma,51,0.078,0.686,0.235
+gse107850,logreg,oligodendroglioma,93,0.075,0.398,0.527
+gse107850,random_forest,astrocytoma,51,0.078,0.863,0.059
+gse107850,random_forest,oligoastrocytoma,51,0.137,0.686,0.176
+gse107850,random_forest,oligodendroglioma,93,0.129,0.462,0.409
+gse16011,logreg,astrocytoma,29,0.379,0.586,0.034
+gse16011,logreg,glioblastoma,159,0.849,0.126,0.025
+gse16011,logreg,oligoastrocytoma,28,0.393,0.464,0.143
+gse16011,logreg,oligodendroglioma,52,0.192,0.135,0.673
+gse16011,logreg,pilocytic astrocytoma,8,0.875,0.0,0.125
+gse16011,random_forest,astrocytoma,29,0.379,0.586,0.034
+gse16011,random_forest,glioblastoma,159,0.843,0.132,0.025
+gse16011,random_forest,oligoastrocytoma,28,0.393,0.464,0.143
+gse16011,random_forest,oligodendroglioma,52,0.192,0.077,0.731
+gse16011,random_forest,pilocytic astrocytoma,8,0.875,0.0,0.125

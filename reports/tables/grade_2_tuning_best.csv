@@ -1,0 +1,7 @@
+model,method,candidates,best_cv_f1_macro,seconds,best_params
+logreg,random search,25,0.8667900162220006,2,"{""model__C"": 0.05342937261279776, ""model__l1_ratio"": 0.2912291401980419}"
+svm_linear,random search,25,0.8640265666349564,2,"{""model__estimator__C"": 0.0006789053271698484}"
+svm_rbf,random search,25,0.8653310427306312,3,"{""model__estimator__C"": 0.3077180271250685, ""model__estimator__gamma"": 0.0009565499215943821}"
+knn,random search,25,0.8634289543272968,1,"{""model__n_neighbors"": 9, ""model__p"": 1, ""model__weights"": ""uniform""}"
+tree,random search,25,0.8586805780629836,1,"{""model__ccp_alpha"": 0.02093887591710553, ""model__criterion"": ""gini"", ""model__max_depth"": 6, ""model__min_samples_leaf"": 9}"
+random_forest,random search,15,0.8653764644465267,15,"{""model__max_depth"": null, ""model__max_features"": ""sqrt"", ""model__min_samples_leaf"": 4}"

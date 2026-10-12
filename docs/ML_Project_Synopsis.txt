@@ -1,0 +1,118 @@
+Machine Learning Project Synopsis
+
+1. Project Title:
+Brain Cancer (Glioma) Type Classification from Tumour Gene Activity Using Machine Learning
+
+2. Team Members:
+Name                    | Roll No.      | Contribution
+------------------------|---------------|------------------------------------------------------------
+[Name 1]                | [Roll No.]    | Data collection and merging
+[Name 2]                | [Roll No.]    | Exploratory data analysis
+[Name 3]                | [Roll No.]    | Feature derivation and classification models
+[Name 4]                | [Roll No.]    | Regularization and hyperparameter tuning
+[Name 5]                | [Roll No.]    | Ensembles, performance analysis and report
+
+3. Problem Statement:
+Gliomas are the most common type of cancer that starts in the brain, and they come in three main types:
+- glioblastoma, which is very aggressive;
+- astrocytoma, which is in between;
+- oligodendroglioma, which grows slowly and has the best outlook.
+
+Treatment and expected survival depend heavily on which type a patient has. Since 2021, doctors decide the type using genetic lab tests on the tumour, not just by looking at it under a microscope, and these tests are expensive and not available in every hospital. However, a single test that measures how active each gene is in the tumour already carries the "fingerprints" of each type. This project trains a machine-learning model to read that gene-activity profile and tell which of the three types the tumour is.
+
+4. Objective:
+- Build a model that classifies a glioma as glioblastoma, astrocytoma or oligodendroglioma using only the tumour's gene activity, plus the patient's age and sex.
+- Create meaningful features from the raw genes, for example scores that detect missing chromosome pieces (1p/19q loss, typical of oligodendroglioma). Then compare simple models, regularized models and ensemble models, and tune each one.
+- Test the model fairly: on patients it has never seen, against published results, and on independent hospital data from different labs.
+
+5. Dataset:
+* Dataset name/source:
+  - Main data: The Cancer Genome Atlas (TCGA) brain tumour cohort (lower-grade glioma + glioblastoma). It is downloaded from the US National Cancer Institute's Genomic Data Commons (GDC), from the official data page of the research paper Ceccarelli et al., Cell (2016).
+    - Gene activity: RNA sequencing of the tumour tissue.
+    - Tumour-type labels: the paper's Table S1, where each type was confirmed by IDH-mutation and 1p/19q lab tests.
+    - Patient details and mutations: the GDC data service.
+  - Independent test cohorts: NCBI GEO (US National Library of Medicine) datasets GSE107850 (EORTC clinical trial, 195 tumours) and GSE16011 (Erasmus MC, 276 tumours).
+  - Supporting data:
+    - NCBI Gene: gene names and chromosome locations.
+    - MSigDB (Broad Institute): gene groups for biological pathways.
+  - No Kaggle or GitHub data is used. Every file is logged with its official URL, date and checksum.
+
+  How the datasets were joined into one:
+  1. Common key: every TCGA patient has a unique ID (e.g. TCGA-CS-4938). The gene-activity file, the Table S1 label file and the GDC patient details all use this ID. The expression file uses longer sample IDs (TCGA-CS-4938-01A-...), which were cut to the 12-character patient ID so that all files match.
+  2. Gene names: the 2015 expression file uses some old gene names. Each gene was mapped through NCBI Gene (current names, old aliases, Entrez IDs) to one official name; 96.9% of genes matched. Duplicate entries were averaged.
+  3. Gene activity values: converted to log2 scale so that a few extremely active genes do not dominate.
+  4. Merge: gene activity (one row per patient) was joined with Table S1 on the patient ID, which adds the tumour-type label, age and sex.
+  5. Filtering: only primary tumours were kept, and patients with no confirmed label (a missing or failed lab test) were dropped. Result: 654 patients with 19,659 genes + age + sex + label.
+  6. Split: the merged table was split once into 80% training and 20% test, stratified by tumour type, and the split was saved so it never changes.
+  7. External cohorts (GEO): their probe IDs were converted to the same official gene names via Entrez IDs, keeping the genes shared with TCGA (16,600-18,700). Because they come from a different machine (microarray instead of RNA sequencing), each sample's gene values were converted to within-sample ranks so the scales are comparable. These cohorts are kept separate and used only for final testing, never for training.
+
+  Data sample (Table S1, label source):
+    Case          Histology           Grade  Age  Sex     IDH test  1p/19q test  Label
+    TCGA-28-5204  glioblastoma        G4     72   male    WT        intact       IDH-wildtype (glioblastoma)
+    TCGA-DB-A64W  oligoastrocytoma    G3     65   female  Mutant    lost         IDH-mutant codeleted (oligodendroglioma)
+
+  Data sample (final model input, log gene activity + age/sex + label):
+    Patient       EGFR   CHI3L1  PDPN   OLIG2  Age  Sex     Label
+    TCGA-CS-4941  16.73  15.36   13.38  12.57  67   male    Glioblastoma
+    TCGA-CS-4938  11.86   7.48    9.90  13.16  31   female  Astrocytoma
+    TCGA-CS-5390  14.97   7.99    6.69  14.50  47   female  Oligodendroglioma
+
+* Link (if publicly available):
+  - TCGA glioma data (NCI GDC): https://gdc.cancer.gov/about-data/publications/lgggbm_2016
+  - External cohorts (NCBI GEO): https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE107850 and https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE16011
+
+* Approx. number of samples:
+  - 654 labelled patients in total:
+    - Glioblastoma: 229
+    - Astrocytoma: 256
+    - Oligodendroglioma: 169
+  - Split: 80% training (523 patients), 20% held-out test (131 patients), keeping the same mix of types in both.
+  - Plus 471 patients in the two independent hospital cohorts.
+
+* Key features:
+  - Activity levels of 19,659 genes. The model keeps the 500–4,000 most variable genes; the exact number is tuned.
+  - Derived chromosome-arm scores: 39 features that detect lost or gained chromosome pieces. They agree with directly measured DNA copy number (r = 0.97 for 1p).
+  - 54 pathway scores: hypoxia, cell growth, immune activity and similar.
+  - Age and sex.
+
+* Target variable:
+  - Tumour type, 3 classes: Glioblastoma (IDH-wildtype), Astrocytoma (IDH-mutant, 1p/19q intact) and Oligodendroglioma (IDH-mutant, 1p/19q lost).
+  - The IDH and 1p/19q lab results define the label, so they are never given to the model as inputs.
+
+6. ML Task & Proposed Approach:
+* ML task: Classification (supervised, 3 classes)
+
+* Proposed ML algorithms/models:
+  - Single models: Logistic Regression (elastic-net), Linear SVM, RBF-kernel SVM, k-Nearest Neighbours, Decision Tree.
+  - Ensembles:
+    - Bagging: Random Forest.
+    - Combined: Soft Voting (averages the probabilities of Logistic Regression, RBF SVM and Random Forest).
+
+* Brief description of how ML will be applied:
+  1. Collect and merge the official data, then run exploratory analysis: class balance, gene distributions, batch effects, mutation patterns and survival per type.
+  2. Derive features from the genes inside each cross-validation fold, so test data never leaks into training.
+  3. Control overfitting with regularization: L1/L2/elastic-net penalties, SVM C, decision-tree depth and pruning, and random-forest depth and leaf size.
+  4. Tune hyperparameters with 5-fold cross-validation and random search (RandomizedSearchCV). Nested cross-validation gives an honest estimate of tuned performance.
+  5. Pick the best model on cross-validation, then evaluate it once on the 20% test set and on the external hospital cohorts.
+  6. Explain the predictions with SHAP values and model coefficients.
+
+7. Evaluation Metrics:
+- Macro-F1: the primary metric, because the classes are unequal in size.
+- Accuracy and Balanced Accuracy.
+- Precision, Recall and F1 for each tumour type.
+- ROC-AUC (one-vs-rest) and PR-AUC.
+- Confusion Matrix.
+- MCC, Cohen's Kappa and Log-loss.
+- Calibration, i.e. how trustworthy the predicted probabilities are.
+- 95% bootstrap confidence intervals, plus statistical tests (corrected t-test, McNemar) to check whether one model is really better than another.
+
+8. Expected Outcome:
+- We expect the model to identify the three glioma types from gene activity with high accuracy. In our cross-validation runs, macro-F1 is already about 0.98, and the held-out test score is 0.97–0.985.
+- We expect it to rely on real biology, such as the loss of chromosome pieces 1p/19q in oligodendroglioma, rather than noise.
+- The project will show how much regularization, tuning and ensembles actually help compared with simpler models. It will also show whether the model still works on data from other hospitals measured on different machines.
+
+9. References / Dataset Link:
+1. Ceccarelli M. et al. "Molecular Profiling Reveals Biologically Discrete Subsets and Pathways of Progression in Diffuse Glioma." Cell 164(3):550-563, 2016. doi:10.1016/j.cell.2015.12.028.
+   Dataset: https://gdc.cancer.gov/about-data/publications/lgggbm_2016
+2. Louis D.N. et al. "The 2021 WHO Classification of Tumors of the Central Nervous System: a summary." Neuro-Oncology 23(8):1231-1251, 2021. doi:10.1093/neuonc/noab106.
+3. Tasci E. et al. "Hierarchical Voting-Based Feature Selection and Ensemble Learning Model Scheme for Glioma Grading with Clinical and Molecular Characteristics." Int. J. Mol. Sci., 2022. PMID: 36430631. (Published benchmark: 87.6% accuracy on TCGA.)

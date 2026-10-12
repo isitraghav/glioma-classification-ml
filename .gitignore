@@ -1,0 +1,44 @@
+# ---------------------------------------------------------------- Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+wheels/
+
+# ---------------------------------------------------------------- environments & tool caches
+.venv/
+.env
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# ---------------------------------------------------------------- data (re-created by `uv run glioma-all`)
+# raw downloads (~354 MB) are fully described by data/raw/MANIFEST.csv (URL, date, MD5)
+data/raw/*
+!data/raw/MANIFEST.csv
+# caches and logs
+data/interim/
+# processed tables are re-built by `glioma-build`; the frozen train/test splits ARE tracked
+data/processed/*
+!data/processed/split_*.json
+# aria2c partial-download state
+*.aria2
+.aria2_input.txt
+
+# ---------------------------------------------------------------- trained models (~70 MB, re-created by `glioma-train`)
+models/
+
+# ---------------------------------------------------------------- outputs of `glioma-predict` demos
+demo*.tsv
+predictions*.csv
+
+# ---------------------------------------------------------------- logs, editors, OS
+*.log
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db

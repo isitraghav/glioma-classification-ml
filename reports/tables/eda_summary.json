@@ -1,0 +1,30 @@
+{
+ "subtype_3_counts": {
+  "IDHwt": 229,
+  "IDHmut-non-codel": 256,
+  "IDHmut-codel": 169
+ },
+ "subtype_3_imbalance_ratio": 1.51,
+ "subtype_7_counts": {
+  "Classic-like": 69,
+  "Mesenchymal-like": 98,
+  "LGm6-GBM": 12,
+  "PA-like": 25,
+  "G-CIMP-low": 17,
+  "G-CIMP-high": 234,
+  "Codel": 173
+ },
+ "subtype_7_imbalance_ratio": 19.5,
+ "grade_2_counts": {
+  "LGG": 516,
+  "GBM": 375
+ },
+ "grade_2_imbalance_ratio": 1.38,
+ "age_kruskal_p": 6.223053768069771e-33,
+ "n_genes": 19659,
+ "n_expr_samples": 667,
+ "frac_genes_mean_below_1": 0.1497024263696017,
+ "frac_zero_values": 0.15638289507771674,
+ "var_frac_top2000": 0.43829959630966187,
+ "n_genes_bonferroni_sig": 12706
+}

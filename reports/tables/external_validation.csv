@@ -1,0 +1,5 @@
+cohort,model,shared_genes,n,tcga_test_f1_rank_normalised,n_idh_known,n_idh_wt,idh_auc,idh_accuracy,idh_balanced_accuracy,idh_sensitivity_mut,idh_specificity_wt,gbm_pred_idhwt,oligo_pred_codel
+gse107850,logreg,18725,195,0.9689,180.0,14.0,0.8627,0.9667,0.8184,0.994,0.6429,,
+gse107850,random_forest,18725,195,0.9781,180.0,14.0,0.8645,0.9667,0.8511,0.988,0.7143,,
+gse16011,logreg,16605,276,0.9769,,,,,,,,0.8491,0.6731
+gse16011,random_forest,16605,276,0.9781,,,,,,,,0.8428,0.7308
