@@ -1,0 +1,8 @@
+TRAINING RUN PROGRESS
+=====================
+status        : FINISHED OK - notebook saved with outputs
+code cells    : 26/26 finished
+elapsed       : 75.9 min
+now running   : -
+
+Note: the model-tuning cell (section 6) is one long cell; progress inside it is not shown.
