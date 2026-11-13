@@ -493,7 +493,7 @@ def write_dataset(c):
         ["IDHwt", "229", "35.0%", "19", "66", "135"],
         ["IDHmut-codel", "169", "25.8%", "81", "70", "0"],
         ["Total", "654", "100%", "213", "239", "143"],
-    ], "Patients per class and per WHO grade (grade is missing for 12 patients).", [1.8, 1.0, 0.9, 1.0, 1.0, 1.0])
+    ], "Patients per class and per WHO grade (grade is missing for 59 patients: 9 IDHwt, 32 IDHmut-non-codel, 18 IDHmut-codel).", [1.8, 1.0, 0.9, 1.0, 1.0, 1.0])
     c.figure(FIG + "cell13.png", "Number of patients in each class.", width=4.5)
 
 
