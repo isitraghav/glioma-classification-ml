@@ -2,7 +2,7 @@
 
 One file that answers the questions anyone will ask about this project: what it is, how it is organised, what every part of the notebook does, why each choice was made, and where the limits are.
 
-**Group:** 1 Raghav Yadav (240598) - 2 Saksham Lodha (240626) - 3 Rayna Manchanda (240601) - 4 Darshita Yadav (240981) - 5 Prerit Srivastava (240593)
+**Group:** 1 Raghav Yadav (240598) - 2 Saksham Lodha (240626) - 3 Rayna Manchanda (240601) - 4 Darshita Yadav (240981) - 5 Prerit Shrivastava (240593)
 
 > **Status note.** All numbers in this file come from the full run of the current notebook (70/20/10 split, five models incl. XGBoost, seed 42). Re-running gives the same split but small numeric differences can occur for the forest and XGBoost depending on hardware.
 
@@ -54,7 +54,7 @@ About 20,000 gene expression values per patient (654 patients after joining expr
 Classification (supervised, 3 classes), because the target is a category with no natural order or distance between classes.
 
 **Q6. What does "success" look like?**
-High macro-F1 on patients the model never saw, a small gap between training and test scores, and a model that relies on plausible biology and not noise (checking this properly, e.g. gene locations, is future work).
+High macro-F1 on patients the model never saw, a small gap between training and test scores, and a model that relies on plausible biology and not noise (8 of the Random Forest's top-10 genes lie on 1p or 19q; see Q61).
 
 ---
 
@@ -97,21 +97,28 @@ The file mixes some Entrez IDs with gene symbols as column names (for example `1
 
 **Q14. What is the folder structure?**
 ```
-final/
+glioma-classification-ml/
 ├── README.md                  # problem, data, method, results, how to run
 ├── QnA.md                     # this file
-├── requirements.txt           # pandas, numpy, scikit-learn, matplotlib, openpyxl, jupyter, xgboost
-├── glioma_analysis.ipynb      # the whole project: data, EDA, features, models, evaluation, conclusion
-├── progress.txt               # status notes
+├── requirements.txt           # pandas, numpy, scikit-learn, matplotlib, openpyxl, jupyter, xgboost, streamlit, joblib
+├── glioma_analysis.ipynb      # the whole analysis: data, EDA, features, models, evaluation, conclusion
+├── progress.txt               # log of the last full notebook run
 ├── data/
-│   ├── raw/
-│   │   ├── LGG-GBM.gene_expression.normalized.txt
-│   │   └── TableS1.PatientData.20151020.v3.xlsx
-│   └── processed/             # empty: the notebook does not save intermediate files
+│   └── raw/
+│       ├── LGG-GBM.gene_expression.normalized.txt
+│       └── TableS1.PatientData.20151020.v3.xlsx
+├── app/
+│   ├── train_models.py        # re-fits the five tuned models with the notebook's split and filter
+│   ├── app.py                 # Streamlit demo (single patient, file upload, whole test set)
+│   └── artifacts/             # saved models, test patients, example upload file
 └── report/
-    └── report.pdf             # final report
+    ├── Final_Project_Report.docx / .pdf   # final report
+    ├── Final_Presentation.pptx            # final slides
+    ├── build_report.py, build_slides.py, make_figures.py
+    ├── figs/                  # figures used in the report and slides
+    └── tools/                 # screenshot and PPTX-to-PDF helpers
 ```
-All code lives in one notebook and runs top to bottom in plain, flat cells (no functions or classes), so "Run All" works.
+The analysis lives in one notebook and runs top to bottom in plain, flat cells (no functions or classes), so "Run All" works. The `app/` and `report/` scripts reuse the notebook's settings; they do not change its results.
 
 **Q15. What is the architecture of the pipeline?**
 ```
@@ -381,7 +388,7 @@ Honestly: say they tie. Statistics cannot separate them at this sample size. A r
 IDH-mutant tumours have a strong, well-known expression signature, so the 3-way split is relatively easy. The test set is small and from one cohort, so the scores should not be read as proof of generalisation to other hospitals. Part of what is learned may also be tumour grade, since IDHwt is mostly grade 4.
 
 **Q61. What do the top genes mean?**
-The Random Forest importance plot lists, in order: RBP1, KIAA0495, PSMB2, MIER1, FBXO42, CSDE1, FBXO17, TMEM167B, FKBP9, EMP3. Six of them (RBP1, KIAA0495, FBXO17, TMEM167B, FKBP9, EMP3) also appear in the ANOVA top-30 heatmap from the EDA, so the forest and the univariate test agree. We have **not** checked where these genes lie on the chromosomes, so we do not claim the model has learned the 1p/19q signal. Importances do not prove biological mechanism, and they are biased toward high-variance genes and split credit among correlated genes.
+The Random Forest importance plot lists, in order: RBP1, KIAA0495, PSMB2, MIER1, FBXO42, CSDE1, FBXO17, TMEM167B, FKBP9, EMP3. Six of them (RBP1, KIAA0495, FBXO17, TMEM167B, FKBP9, EMP3) also appear in the ANOVA top-30 heatmap from the EDA, so the forest and the univariate test agree. We looked up their chromosome locations (NCBI Gene): six lie on 1p (KIAA0495/GFOD3P 1p36.32, PSMB2 1p34.3, MIER1 1p31.3, FBXO42 1p36.13, CSDE1 1p13.2, TMEM167B 1p13.3) and two on 19q (FBXO17 19q13.2, EMP3 19q13.33), so 8 of the 10 sit on the arms lost in the 1p/19q codeletion. RBP1 (3q23) is known to be silenced by DNA hypermethylation in IDH-mutant gliomas (Chou et al., JNCI 2012). This fits the model picking up real biology, but importances do not prove biological mechanism, and they are biased toward high-variance genes and split credit among correlated genes.
 
 ---
 
@@ -452,7 +459,8 @@ An independent test cohort; wider tuning ranges; repeated cross-validation; addi
 
 **Q83. How do I run the project?**
 1. `pip install -r requirements.txt` (or use the existing virtual environment, which already has the packages).
-2. Open `glioma_analysis.ipynb` and **Run All**. Run it from the `final/` folder, because the data path is `data/raw/`.
+2. Open `glioma_analysis.ipynb` and **Run All**. Run it from the repository root folder, because the data path is `data/raw/`.
+3. Demo app: `python app/train_models.py`, then `python -m streamlit run app/app.py`.
 
 **Q84. How long does it take?**
 The cross-validated searches dominate. The full run took about 76 minutes on a 16-core CPU (the four non-XGBoost searches took about 9-19 minutes; the XGBoost search with 160 fits is the slowest part). The first search (logistic regression) should finish in under a minute.

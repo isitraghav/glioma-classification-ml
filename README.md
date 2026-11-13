@@ -55,8 +55,9 @@ The top three models are statistically indistinguishable (overlapping CIs; one p
 
 ## Structure
 ```
-README.md   requirements.txt   glioma_analysis.ipynb
-data/raw/        source data
-data/processed/  currently unused (the notebook saves nothing here)
-report/          report.pdf (final report)
+README.md   QnA.md   requirements.txt   glioma_analysis.ipynb   progress.txt
+data/raw/        source data (expression matrix + Table S1)
+app/             Streamlit demo: train_models.py (re-fits the tuned models), app.py, artifacts/
+report/          Final_Project_Report.docx/.pdf (final report), Final_Presentation.pptx (slides),
+                 build_report.py, build_slides.py, make_figures.py, figs/, tools/
 ```
