@@ -292,7 +292,12 @@ def build(toc_pages=None):
     s5 = copy.deepcopy(P[25]._element)
     P[25]._element.addnext(s5)
     for p, (name, roll) in zip(sig + [Paragraph(s5, P[25]._parent)], TEAM):
-        set_par_text(p, f"{name} ({roll})\tSignature: ____________________")
+        set_par_text(p, f"{name} ({roll})\tSignature: ")
+        sr = p.add_run(name)               # name-based signature in a handwriting font
+        sr.font.name, sr.font.size = "Segoe Script", Pt(13)
+        sr.font.color.rgb = RGBColor(0x1F, 0x2A, 0x6B)
+        for attr in ("w:eastAsia", "w:cs"):
+            sr._element.rPr.rFonts.set(qn(attr), "Segoe Script")
         for ts in p._p.xpath("./w:pPr/w:tabs"):
             ts.getparent().remove(ts)
         pf = p.paragraph_format
@@ -301,6 +306,9 @@ def build(toc_pages=None):
     for i in (20, 21):
         P[i].paragraph_format.left_indent = P[i].paragraph_format.right_indent = Inches(0)
         P[i].paragraph_format.first_line_indent = Inches(0)
+    set_par_text(P[27], "Date: ")
+    dr = P[27].add_run("15/11/2026"); dr.bold = False
+    dr.font.name = P[27].runs[0].font.name
     for i in (26, 27):
         P[i].paragraph_format.left_indent = Inches(0)
         P[i].paragraph_format.space_before, P[i].paragraph_format.space_after = Pt(0), Pt(6)
