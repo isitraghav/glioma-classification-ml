@@ -1,7 +1,7 @@
 """Re-fit the five tuned models from glioma_analysis.ipynb and save them for the demo app.
 
 The split, log transform, 20% expression filter and the best hyperparameters are copied
-from the notebook (sections 3 and 6), so the saved models reproduce the notebook's test scores.
+from the notebook (Steps 3, 5 and 7), so the saved models reproduce the notebook's test scores.
 
 Run from the project root:  python app/train_models.py
 """
@@ -27,14 +27,14 @@ RAW = "data/raw/"
 OUT = "app/artifacts/"
 classes = ["IDHwt", "IDHmut-non-codel", "IDHmut-codel"]
 
-# 1. Data (notebook section 1)
+# 1. Data (notebook Step 1)
 expr = pd.read_csv(RAW + "LGG-GBM.gene_expression.normalized.txt", sep="\t", index_col=0)
 meta = pd.read_excel(RAW + "TableS1.PatientData.20151020.v3.xlsx", sheet_name=0, header=1).set_index("Case")
 labels = meta["IDH/codel subtype"].dropna()
 ids = expr.index.intersection(labels.index)
 X, y = expr.loc[ids], labels.loc[ids]
 
-# 2. log2, split, filter, encode (notebook section 3)
+# 2. log2, split, filter, encode (notebook Steps 3-5)
 X_log = np.log2(X + 1)
 X_rest, X_te, y_rest, y_te = train_test_split(X_log, y, test_size=0.20, stratify=y, random_state=SEED)
 X_tr, X_va, y_tr, y_va = train_test_split(X_rest, y_rest, test_size=0.125, stratify=y_rest, random_state=SEED)
@@ -43,12 +43,13 @@ X_tr, X_va, X_te = X_tr.loc[:, keep], X_va.loc[:, keep], X_te.loc[:, keep]
 code_of = {name: i for i, name in enumerate(classes)}
 y_tr, y_va, y_te = y_tr.map(code_of), y_va.map(code_of), y_te.map(code_of)
 
-# 3. Best hyperparameters found by the notebook's grid search (section 6 output)
+# 3. Best hyperparameters found by the notebook's grid search (Step 7.6 output).
+#    Logistic Regression is listed first because it was selected on the validation set.
 models = {
-    "Random Forest": Pipeline([("clf", RandomForestClassifier(
-        n_estimators=200, max_features=0.2, min_samples_leaf=8, random_state=SEED, n_jobs=-1))]),
     "Logistic Regression": Pipeline([("scale", StandardScaler()), ("clf", LogisticRegression(
         C=0.001, solver="lbfgs", max_iter=500, random_state=SEED))]),
+    "Random Forest": Pipeline([("clf", RandomForestClassifier(
+        n_estimators=500, max_features=0.2, min_samples_leaf=1, random_state=SEED, n_jobs=-1))]),
     "XGBoost": Pipeline([("clf", XGBClassifier(
         objective="multi:softprob", tree_method="hist", subsample=0.8, eval_metric="mlogloss",
         n_estimators=300, max_depth=2, learning_rate=0.05, colsample_bytree=0.2, reg_lambda=1,

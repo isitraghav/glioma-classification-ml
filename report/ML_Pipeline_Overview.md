@@ -98,7 +98,7 @@ Each model is a scikit-learn `Pipeline`, so every learned step is fitted on trai
 | LR | C ∈ {1e-4 … 1} | C = 0.001 | 0.983 |
 | DT | depth, leaf, ccp_alpha | 3, 15, 0 | 0.931 |
 | KNN | PCs, k, weights | 10, 3, distance | 0.953 |
-| RF | trees, max_features, leaf | 200, 0.2, 8 | 0.983 |
+| RF | trees, max_features, leaf | 500, 0.2, 1 | 0.985 |
 | XGB | trees, depth, lr, colsample, lambda | 300, 2, 0.05, 0.2, 1 | 0.989 |
 
 ## Stage 10: Model selection
@@ -106,12 +106,13 @@ Each model is a scikit-learn `Pipeline`, so every learned step is fitted on trai
 
 | Model | Validation macro-F1 |
 |---|---|
-| **Random Forest** | **1.000 (selected)** |
-| Logistic Regression | 0.986 |
+| **Logistic Regression** | **0.986 (selected)** |
+| Random Forest | 0.986 |
 | XGBoost | 0.986 |
 | Decision Tree | 0.928 |
 | KNN | 0.915 |
 
+- Three models tied at 0.986, so the tie went to the simplest model, Logistic Regression.
 - The choice was locked in before the test set was opened.
 
 ## Stage 11: Final evaluation on the test set
@@ -119,8 +120,8 @@ Each model is a scikit-learn `Pipeline`, so every learned step is fitted on trai
 
 | Model | Accuracy | Macro-F1 (95% CI) | ROC-AUC | Gap |
 |---|---|---|---|---|
-| Logistic Regression | 0.985 | 0.984 (0.957–1.000) | 0.992 | 0.015 |
-| **Random Forest** | 0.969 | 0.971 (0.939–0.994) | 0.997 | 0.028 |
+| **Logistic Regression** | 0.985 | 0.984 (0.957–1.000) | 0.992 | 0.015 |
+| Random Forest | 0.977 | 0.978 (0.949–1.000) | 0.997 | 0.023 |
 | XGBoost | 0.969 | 0.970 (0.938–0.993) | 0.999 | 0.031 |
 | Decision Tree | 0.947 | 0.949 (0.908–0.984) | 0.956 | 0.012 |
 | KNN | 0.931 | 0.934 (0.892–0.971) | 0.972 | 0.069 |
@@ -129,21 +130,21 @@ Each model is a scikit-learn `Pipeline`, so every learned step is fitted on trai
 
 ## Stage 12: Overfitting and underfitting analysis
 - **Overfit gap:** training accuracy minus test accuracy. KNN has the largest gap (0.069), so it overfits the most.
-- **Cross-validation vs validation vs test:** for the top three models, cross-validation and test scores are within about 1.5 points, so the cross-validation estimates were reliable. Random Forest's perfect validation score was partly luck.
-- **Underfitting:** the Decision Tree has the lowest training accuracy (0.959) and the lowest cross-validation score. At depth 3 it is too simple.
+- **Cross-validation vs validation vs test:** for the top three models, cross-validation and test scores are within about 2 points, so the cross-validation estimates were reliable.
+- **Underfitting:** the Decision Tree has the lowest training accuracy (0.958) and the lowest cross-validation score. At depth 3 it is too simple.
 
 ## Stage 13: Ensemble comparison
-- **Bagging vs single tree:** Random Forest beat the Decision Tree, 0.971 vs 0.949. Bagging reduced variance.
-- **Boosting vs bagging:** XGBoost and Random Forest tied, 0.970 vs 0.971.
-- **Linear vs trees:** penalised Logistic Regression matched or beat both ensembles, which is typical when there are far more genes than patients.
+- **Bagging vs single tree:** Random Forest beat the Decision Tree, 0.978 vs 0.949. Bagging reduced variance.
+- **Boosting vs bagging:** XGBoost was slightly below Random Forest, 0.970 vs 0.978.
+- **Linear vs trees:** penalised Logistic Regression beat both ensembles (0.984), which is typical when there are far more genes than patients.
 
 ## Stage 14: Error analysis
 - A confusion matrix for each of the five models.
 - A per-class precision/recall report for the selected model.
-- Random Forest got 127 of 131 test patients right. Its most frequent error was IDHwt predicted as IDHmut-non-codel (2 patients).
+- Logistic Regression got 129 of 131 test patients right. Both errors were IDHmut-non-codel predicted as IDHmut-codel.
 
 ## Stage 15: Model interpretation
-- **Top 10 Random Forest genes:** RBP1, KIAA0495, PSMB2, MIER1, FBXO42, CSDE1, FBXO17, TMEM167B, FKBP9, EMP3.
+- **Top 10 Random Forest genes:** RBP1, KIAA0495, PSMB2, FBXO42, FKBP9, MIER1, EMP3, FBXO17, LRRC41, CSDE1.
 - **RBP1:** known to be switched off in IDH-mutant gliomas.
 - **Chromosome locations:** 8 of the 10 lie on 1p (6 genes) or 19q (2 genes). This is consistent with the effects of 1p/19q codeletion, but it is a plausibility check, not proof.
 
@@ -177,4 +178,3 @@ Each model is a scikit-learn `Pipeline`, so every learned step is fitted on trai
 - Validate on an independent cohort.
 - Use wider grids and nested or repeated cross-validation.
 - Try SVMs.
-- Add chromosome-arm and pathway features.

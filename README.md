@@ -18,28 +18,28 @@ Both files come from the Ceccarelli 2016 TCGA LGG+GBM freeze (GDC portal):
 
 The only data preparation is an inner join on the TCGA case ID after dropping unlabelled patients: **654 patients x 20,330 genes**. The raw files are never modified.
 
-## Method (`glioma_analysis.ipynb`)
+## Method (`glioma_analysis.ipynb`, organised in the 10 steps of the course brief)
 1. **EDA:** class balance, data quality, skew, p >> n, PCA, class vs grade.
-2. **Features** (fitted on training data only): log2(x+1), drop genes expressed in under 20% of patients, standardise (LR, KNN), PCA (KNN only).
-3. **Split:** 70% train / 10% validation / 20% test, stratified, seed 42 (457 / 66 / 131 patients). Train tunes, validation picks the model, test is used once at the end.
+2. **Features:** log2(x+1); then, as steps inside every model pipeline (so they are re-fitted in each CV fold): drop genes expressed in under 20% of patients, standardise (LR, KNN), PCA (KNN only).
+3. **Split:** 70% train / 10% validation / 20% test, stratified, seed 42 (457 / 66 / 131 patients). Train tunes, validation picks the model (ties go to the simplest model), test is used once at the end.
 4. **Models and tuning:** Logistic Regression (L2), Decision Tree (depth, leaf size, pruning), KNN, Random Forest, XGBoost. Exhaustive search with 5-fold stratified CV, scored on macro-F1.
 5. **Ensembles:** Random Forest (bagging) and XGBoost (boosting), compared against the single Decision Tree and each other.
-6. **Evaluation:** accuracy, balanced accuracy, macro precision/recall/F1, ROC-AUC, PR-AUC, MCC, Cohen's kappa, log-loss, bootstrap 95% CIs, train-test gap, confusion matrices, top Random Forest genes.
+6. **Evaluation and interpretation:** accuracy, balanced accuracy, macro precision/recall/F1, ROC-AUC, PR-AUC, MCC, Cohen's kappa, log-loss, bootstrap 95% CIs, train-test gap, confusion matrices, top Random Forest genes, Logistic Regression coefficients, individual predictions.
 
 See `QnA.md` for a full question-and-answer walkthrough of the project, its architecture and every design decision.
 
 ## Results
-70/20/10 split, 131 test patients. The validation set picked **Random Forest** (validation macro-F1 1.000, but only 66 patients).
+70/10/20 split, 131 test patients. Logistic Regression, Random Forest and XGBoost tied on the 66 validation patients (macro-F1 0.986); the tie went to the simplest model, **Logistic Regression**.
 
 | Model | CV macro-F1 | Test accuracy | Test macro-F1 (95% CI) | ROC-AUC | Train-test gap |
 |---|---|---|---|---|---|
-| Logistic Regression | 0.983 | 0.985 | 0.984 (0.957-1.000) | 0.992 | 0.015 |
-| Random Forest | 0.983 | 0.969 | 0.971 (0.939-0.994) | 0.997 | 0.028 |
+| **Logistic Regression (selected)** | 0.983 | 0.985 | 0.984 (0.957-1.000) | 0.992 | 0.015 |
+| Random Forest | 0.985 | 0.977 | 0.978 (0.949-1.000) | 0.997 | 0.023 |
 | XGBoost | 0.989 | 0.969 | 0.970 (0.938-0.993) | 0.999 | 0.031 |
 | Decision Tree | 0.931 | 0.947 | 0.949 (0.908-0.984) | 0.956 | 0.012 |
 | KNN | 0.953 | 0.931 | 0.934 (0.892-0.971) | 0.972 | 0.069 |
 
-The top three models are statistically indistinguishable (overlapping CIs; one patient is about 0.8 points). Ensembles clearly beat a single tree (0.971 vs 0.949), but boosting did not beat bagging. Logistic Regression is the simplest model and scored highest on the test set, but it was not the validation pick.
+The top three models are statistically indistinguishable (overlapping CIs; one patient is about 0.8 points). Ensembles clearly beat a single tree (0.978 vs 0.949), but boosting did not beat bagging. The selected Logistic Regression is the simplest model and also scored highest on the test set (129 of 131 correct).
 
 ## Limitations
 - About 650 patients from one TCGA cohort, one split, no external validation, no batch correction.
@@ -49,8 +49,8 @@ The top three models are statistically indistinguishable (overlapping CIs; one p
 
 ## How to run
 1. `pip install -r requirements.txt`
-2. Open `glioma_analysis.ipynb` and run all cells (roughly 30-75 minutes depending on the CPU; the grid searches dominate, XGBoost most).
-3. Demo app: `python app/train_models.py` (re-fits the five tuned models, about 1 minute), then `python -m streamlit run app/app.py`.
+2. Open `glioma_analysis.ipynb` and run all cells (about 80 minutes with `N_JOBS = 6` on an 8-core laptop; the XGBoost grid search dominates). Each parallel worker needs about 1 GB of memory, so lower `N_JOBS` in the Setup cell if memory is short.
+3. Demo app: `python app/train_models.py` (re-fits the five tuned models, about 1 minute), then `python -m streamlit run app/app.py`. Two mock upload files are in `app/demo/`.
 4. Report and slides: `python report/make_figures.py`, `python report/build_report.py` (needs MS Word for the PDF), `python report/build_slides.py`.
 
 ## Structure

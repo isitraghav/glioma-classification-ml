@@ -1,6 +1,6 @@
 """Bar charts for the report/slides, in one clean style: light-grey vs steel-blue bars, boxed axes,
 values printed on the bars. Numbers are copied from the saved outputs of glioma_analysis.ipynb
-(the gene importances come from the re-fitted Random Forest in app/artifacts/models.joblib)."""
+(including the Random Forest gene importances, Step 10.1)."""
 import matplotlib.pyplot as plt
 
 plt.rcParams.update({
@@ -16,12 +16,12 @@ BAR = dict(edgecolor=EDGE, linewidth=0.6)
 OUT = "report/figs/"
 
 models = ["Logistic\nRegression", "Random\nForest", "XGBoost", "Decision\nTree", "KNN"]
-cv   = [98.3, 98.3, 98.9, 93.1, 95.3]
-val  = [98.6, 100.0, 98.6, 92.8, 91.5]
-acc  = [98.5, 96.9, 96.9, 94.7, 93.1]
-f1   = [98.4, 97.1, 97.0, 94.9, 93.4]
-lo   = [95.7, 93.9, 93.8, 90.8, 89.2]
-hi   = [100.0, 99.4, 99.3, 98.4, 97.1]
+cv   = [98.3, 98.5, 98.9, 93.1, 95.3]
+val  = [98.6, 98.6, 98.6, 92.8, 91.5]
+acc  = [98.5, 97.7, 96.9, 94.7, 93.1]
+f1   = [98.4, 97.8, 97.0, 94.9, 93.4]
+lo   = [95.7, 94.9, 93.8, 90.8, 89.2]
+hi   = [100.0, 100.0, 99.3, 98.4, 97.1]
 
 
 def label(ax, bars, vals, dy=0.25, fmt="{:.1f}"):
@@ -73,13 +73,13 @@ ax.set_ylim(0, 300); ax.set_ylabel("Patients"); ax.set_title("Patients per class
 plt.tight_layout(); plt.savefig(OUT + "cell13.png", dpi=220); plt.close()
 
 # 4. Random Forest top-10 genes
-genes = ["RBP1", "KIAA0495", "PSMB2", "MIER1", "FBXO42", "CSDE1", "FBXO17", "TMEM167B", "FKBP9", "EMP3"]
-imp = [0.1056, 0.0532, 0.0460, 0.0417, 0.0385, 0.0369, 0.0360, 0.0324, 0.0322, 0.0319]
+genes = ["RBP1", "KIAA0495", "PSMB2", "FBXO42", "FKBP9", "MIER1", "EMP3", "FBXO17", "LRRC41", "CSDE1"]
+imp = [0.0882, 0.0705, 0.0482, 0.0439, 0.0414, 0.0386, 0.0340, 0.0296, 0.0291, 0.0272]
 fig, ax = plt.subplots(figsize=(5.6, 3.6))
 bars = ax.barh(genes[::-1], imp[::-1], 0.6, color=BLUE, **BAR)
 for b, v in zip(bars, imp[::-1]):
     ax.text(v + 0.0015, b.get_y() + b.get_height() / 2, f"{v:.3f}", va="center", fontsize=8.5)
-ax.set_xlim(0, 0.122); ax.set_xlabel("Importance (mean decrease in impurity)")
+ax.set_xlim(0, 0.102); ax.set_xlabel("Importance (mean decrease in impurity)")
 ax.set_title("Random Forest: top 10 genes"); ax.tick_params(axis="y", length=0); ax.set_axisbelow(True)
 plt.tight_layout(); plt.savefig(OUT + "cell61.png", dpi=220); plt.close()
 print("done")

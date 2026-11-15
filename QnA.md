@@ -4,7 +4,7 @@ One file that answers the questions anyone will ask about this project: what it 
 
 **Group:** 1 Raghav Yadav (240598) - 2 Saksham Lodha (240626) - 3 Rayna Manchanda (240601) - 4 Darshita Yadav (240981) - 5 Prerit Shrivastava (240593)
 
-> **Status note.** All numbers in this file come from the full run of the current notebook (70/20/10 split, five models incl. XGBoost, seed 42). Re-running gives the same split but small numeric differences can occur for the forest and XGBoost depending on hardware.
+> **Status note.** All numbers in this file come from the full run of the current notebook (70/10/20 split, five models incl. XGBoost, seed 42). Re-running gives the same split but small numeric differences can occur for the forest and XGBoost depending on hardware.
 
 ---
 
@@ -132,19 +132,19 @@ The analysis lives in one notebook and runs top to bottom in plain, flat cells (
                                           │
               stratified split  70% train | 10% validation | 20% test
                                           │
-                  low-expression filter learned on TRAIN only (genes expressed in >= 20%)
+     low-expression filter = first step of every pipeline (re-fitted inside each CV fold)
                                           │
         ┌───────────── 5 models, each a scikit-learn Pipeline ─────────────┐
-        │ Logistic Regression   : StandardScaler -> LR (L2)                │
-        │ Decision Tree         : tree                                     │
-        │ KNN                   : StandardScaler -> PCA -> KNN             │
-        │ Random Forest (bag)   : forest                                   │
-        │ XGBoost (boost)       : gradient-boosted trees                   │
+        │ Logistic Regression   : filter -> StandardScaler -> LR (L2)      │
+        │ Decision Tree         : filter -> tree                           │
+        │ KNN                   : filter -> StandardScaler -> PCA -> KNN   │
+        │ Random Forest (bag)   : filter -> forest                         │
+        │ XGBoost (boost)       : filter -> gradient-boosted trees         │
         └──────────────────────────────────────────────────────────────────┘
                                           │
         exhaustive hyperparameter search, 5-fold stratified CV on TRAIN, score = macro-F1
                                           │
-        VALIDATION set  ──► pick the final model (best validation macro-F1)
+        VALIDATION set  ──► pick the final model (best validation macro-F1; ties -> simplest)
                                           │
         TEST set (used once) ──► evaluation matrix, confusion matrices, bootstrap CIs
                                           │
@@ -162,34 +162,22 @@ The analysis lives in one notebook and runs top to bottom in plain, flat cells (
 
 **Q17. What is in the notebook, in order?**
 
-The notebook is split into small cells, each with a short markdown header. Longest code cell: 23 lines. No functions or classes.
+The notebook follows the 10 steps of the course brief. Every step opens with a short markdown explanation, and every code cell is a small ready-to-run snippet with plain comments. There are no functions; the only class is the low-expression filter (Q21).
 
-| Section | What it does |
+| Step | What it does |
 |---|---|
-| Title, Problem Statement, Motivation, Literature Review | group members, the task, why it matters, the two references from the synopsis |
-| Setup | imports, `SEED = 42`, the path, the class order list. Sets `OMP_NUM_THREADS=1` so parallel workers do not fight over CPU threads |
-| 1.1 Load | reads the expression matrix and Table S1 |
-| 1.2 Join | keeps patients with a label and expression, builds `X`, `y`, `grade` |
-| 2.1 Class balance | bar chart of the three classes |
-| 2.2 Data quality | missing values, duplicates, all-zero and mostly-zero genes, genes-to-patients ratio |
-| 2.3 Distribution | histograms of raw vs log2 values (skew) |
-| 2.4 PCA and grade | 2-D PCA coloured by class, and the class-by-grade table |
-| 2.5 Gene sparsity | fraction of patients expressing each gene, with the 20% filter line |
-| 2.6 Top genes | heatmap of the top 30 class-discriminating genes (descriptive only) |
-| EDA findings | the conclusions drawn from the plots |
-| 3. Features and split | explanation, then 3.1 log2 + 70/10/20 stratified split, 3.2 low-expression filter learned on train, 3.3 integer labels and class-mix check |
-| 4. Base models | 4.1 Logistic Regression, 4.2 Decision Tree, 4.3 KNN: each cell adds a pipeline and its hyperparameter values to a `models` dictionary |
-| 5. Ensemble models | 5.1 Random Forest (bagging), 5.2 XGBoost (boosting), added to the same dictionary |
-| 6. Tuning | one loop runs the cross-validated search for every model and prints the best settings |
-| 7.1 Validation | scores each tuned model on the validation set and selects one |
-| 7.2 Test predictions | predictions and probabilities of every model on the test set |
-| 7.3 Evaluation matrix | all metrics for all models, plus training accuracy and the overfit gap |
-| 7.4 Confusion matrices | one per model |
-| 7.5 Per-class report | precision, recall and F1 for the selected model |
-| 7.6 Bootstrap | 95% confidence intervals for test macro-F1 |
-| 7.7 Gene importance | top 10 Random Forest genes |
-| 7.8 Interpretation, 7.9 Summary | how to read the results, then an automatic printout of the key numbers |
-| 8. Conclusion | expected outcome, limitations, next steps |
+| Title, Problem Statement, Setup | group members, the one-line problem and notebook map; imports, plot style, `SEED = 42`, `N_JOBS`, data path, class order |
+| 1. Understanding the dataset | load and join the two files; count records and attributes; numerical vs categorical; classification, not regression |
+| 2. EDA | statistical summary, missing values and duplicates, class and value distributions, gene sparsity, outliers (IQR on log scale) and marker-gene boxplots, PCA and grade table, top-30 gene heatmap, gene-gene correlation, key observations |
+| 3. Preprocessing | a table of each decision and why; log2 transform; target encoding |
+| 4. Feature selection | why the filter is unsupervised and re-fitted per fold; the `LowExpressionFilter` class; top genes related to the target (descriptive) |
+| 5. Splitting | 70/10/20 stratified split, class mix per set, genes kept on the full training set |
+| 6. Algorithms | one table: how each model works, why it suits the data, its limitations |
+| 7. Training | one cell per model (pipeline + grid), then the cross-validated grid search |
+| 8. Evaluation | validation choice, test predictions, metrics table, confusion matrices, per-class report, bootstrap CIs, strengths and weaknesses |
+| 9. Comparison | comparison table and chart, trade-offs table, final choice and summary printout |
+| 10. Interpretation | Random Forest importances, Logistic Regression coefficients per class, individual predictions (including the errors), association vs causation |
+| Conclusion | main result, limitations, next steps |
 
 **Q18. What does the data-loading cell do?**
 `pd.read_csv(..., sep="\t", index_col=0)` reads the expression matrix with case IDs as the index. `pd.read_excel(..., sheet_name=0, header=1)` reads Table S1 (the real header is the second row). It takes the `IDH/codel subtype` column, drops missing values, intersects the case IDs with the expression index, and slices both. `grade` is kept only for EDA.
@@ -205,20 +193,20 @@ The notebook is split into small cells, each with a short markdown header. Longe
 **Q20. Why is the top-30-genes heatmap not feature selection?**
 It uses an ANOVA F-score on the *whole* dataset only to describe the data. It is never used to choose features for the models, because that would leak test information. The cell says so.
 
-**Q21. What happens in the split and filter cells (3.1 to 3.3)?**
+**Q21. What happens in the preprocessing, filter and split cells (Steps 3 to 5)?**
 1. `X_log = np.log2(X + 1)`.
 2. First split: 20% test. Second split: from the remaining 80%, take 12.5% (which is 10% of the total) as validation. Both are stratified with `random_state=42`. Result: 457 / 66 / 131 patients.
-3. The filter: `keep = (X_tr > 0).mean() >= 0.2` is computed from the **training** patients only, and the same columns are kept in validation and test. About 17,963 genes remain.
+3. The filter is a small scikit-learn class, `LowExpressionFilter`, placed as the **first step of every pipeline**. In cross-validation it is re-fitted on the training part of each fold, so held-out folds never influence which genes are kept. Fitted on all 457 training patients it keeps 17,963 genes, and that list is applied to validation and test.
 4. Labels are mapped to integers (IDHwt=0, IDHmut-non-codel=1, IDHmut-codel=2), because XGBoost accepts only integer labels, and all models use the same labels.
 
 **Q22. How are the pipelines built?**
-Each model is a scikit-learn `Pipeline`, so any scaler or PCA is fitted only on the training fold during cross-validation. For example KNN is `StandardScaler -> PCA -> KNeighborsClassifier`.
+Each model is a scikit-learn `Pipeline` that starts with the gene filter, so the filter, any scaler and PCA are fitted only on the training fold during cross-validation. For example KNN is `LowExpressionFilter -> StandardScaler -> PCA -> KNeighborsClassifier`.
 
 **Q23. How does the tuning loop work?**
-`GridSearchCV(pipeline, params, cv=cv, scoring="f1_macro", n_jobs=-1)` tries every combination of the listed values, with 5-fold stratified CV on the training set, and keeps the setting with the best average macro-F1. The best fitted pipeline and its CV score are stored for each model.
+`GridSearchCV(pipeline, grid, cv=cv, scoring="f1_macro", n_jobs=N_JOBS)` tries every combination of the listed values, with 5-fold stratified CV on the training set, and keeps the setting with the best average macro-F1. The best fitted pipeline and its CV score are stored for each model.
 
-**Q24. Why are there no functions or classes in the notebook?**
-By request: plain top-to-bottom cells so the notebook can be run automatically with Run All. Loops and dictionaries are used instead.
+**Q24. Why are there no functions, and why is there one class?**
+By request: plain top-to-bottom cells so the notebook can be run with Run All; loops and dictionaries are used instead of functions. The one class, `LowExpressionFilter`, is needed because scikit-learn can only re-fit a step inside each cross-validation fold if that step is written as a class with `fit` and `transform`.
 
 **Q25. What is in the evaluation matrix?**
 For every model on the test set: accuracy, balanced accuracy, macro precision, macro recall, macro-F1, ROC-AUC (one-vs-rest), PR-AUC, MCC, Cohen's kappa and log-loss.
@@ -231,7 +219,7 @@ For every model on the test set: accuracy, balanced accuracy, macro precision, m
 Raw RSEM values span many orders of magnitude, so a few very active genes would dominate any distance- or weight-based model. The log compresses the range and stabilises variance. The `+ 1` keeps zeros defined. It is a fixed transform that learns nothing from the data, so it can safely be applied before the split.
 
 **Q27. Why filter genes expressed in under 20% of patients?**
-Genes that are zero for most patients carry almost no information but add noise dimensions in a p >> n problem. The EDA found 183 all-zero and 1,879 mostly-zero genes. The 20% threshold is a judgement call and was not tuned. The filter is learned on the training patients only so nothing leaks from validation or test.
+Genes that are zero for most patients carry almost no information but add noise dimensions in a p >> n problem. The EDA found 183 all-zero and 1,879 mostly-zero genes. The 20% threshold is a judgement call and was not tuned. The filter is a pipeline step, so it is learned from the training part of each cross-validation fold and from the training patients for the final models; nothing leaks from held-out folds, validation or test.
 
 **Q28. Why not select features with ANOVA or similar?**
 An earlier version used an ANOVA top-k step. It was replaced by the explicit, unsupervised low-expression filter, which is simpler to explain and cannot leak labels. The models cope with the remaining ~18,000 genes through regularization (L2, tree limits, shrinkage, column subsampling).
@@ -358,37 +346,36 @@ No. A random forest grows trees to fit the training data, so near-100% training 
 ## 9. Results
 
 **Q57. What are the results?**
-Split: 457 train / 66 validation / 131 test patients. Hyperparameters were tuned by 5-fold CV on the training set. The validation set picked **Random Forest** (validation macro-F1 1.000; Logistic Regression and XGBoost 0.986, Decision Tree 0.928, KNN 0.915). Test results:
+Split: 457 train / 66 validation / 131 test patients. Hyperparameters were tuned by 5-fold CV on the training set. On the validation set Logistic Regression, Random Forest and XGBoost tied (macro-F1 0.986 each; Decision Tree 0.928, KNN 0.915). The notebook keeps the first model in its list when scores tie, so the selected model is **Logistic Regression**, the simplest of the three. Test results:
 
 | Model | CV macro-F1 | Test acc | Test macro-F1 (95% CI) | ROC-AUC | MCC | Log-loss | Gap |
 |---|---|---|---|---|---|---|---|
-| Logistic Regression | 0.983 | 0.985 | 0.984 (0.957-1.000) | 0.992 | 0.977 | 0.098 | 0.015 |
-| Random Forest | 0.983 | 0.969 | 0.971 (0.939-0.994) | 0.997 | 0.954 | 0.135 | 0.028 |
+| **Logistic Regression (selected)** | 0.983 | 0.985 | 0.984 (0.957-1.000) | 0.992 | 0.977 | 0.098 | 0.015 |
+| Random Forest | 0.985 | 0.977 | 0.978 (0.949-1.000) | 0.997 | 0.965 | 0.118 | 0.023 |
 | XGBoost | 0.989 | 0.969 | 0.970 (0.938-0.993) | 0.999 | 0.954 | 0.077 | 0.031 |
 | Decision Tree | 0.931 | 0.947 | 0.949 (0.908-0.984) | 0.956 | 0.919 | 1.960 | 0.012 |
 | KNN | 0.953 | 0.931 | 0.934 (0.892-0.971) | 0.972 | 0.896 | 1.440 | 0.069 |
 
-Best settings: LR `C`=0.001; Decision Tree depth 3, leaf 15, no pruning; KNN 10 PCA components, k=3, distance weights; Random Forest 200 trees, `max_features`=0.2, leaf 8; XGBoost 300 trees, depth 2, learning rate 0.05, colsample 0.2, lambda 1.
+Best settings: LR `C`=0.001; Decision Tree depth 3, leaf 15, no pruning; KNN 10 PCA components, k=3, distance weights; Random Forest 500 trees, `max_features`=0.2, leaf 1; XGBoost 300 trees, depth 2, learning rate 0.05, colsample 0.2, lambda 1.
 
-Errors out of 131 test patients: Logistic Regression 2, Random Forest 4, XGBoost 4, Decision Tree 7, KNN 9. The selected Random Forest's errors: 2 IDHwt predicted as non-codel, 1 non-codel predicted as IDHwt, 1 non-codel predicted as codel. Every model except KNN classified all 34 IDHmut-codel test patients correctly.
+Errors out of 131 test patients: Logistic Regression 2, Random Forest 3, XGBoost 4, Decision Tree 7, KNN 9. The selected Logistic Regression's two errors are both IDHmut-non-codel tumours predicted as IDHmut-codel (TCGA-CS-5394, grade 3; TCGA-HT-8113, grade 2, which histology recorded as an oligodendroglioma). It classified every IDHwt and every IDHmut-codel test patient correctly. Every model except KNN classified all 34 IDHmut-codel test patients correctly.
 
 **Q58. What do the results tell us?**
 - Logistic Regression, Random Forest and XGBoost are tied within noise (overlapping CIs; one patient is about 0.8 points).
-- **Bagging vs single tree:** Random Forest beats the Decision Tree (test macro-F1 0.971 vs 0.949; CV 0.983 vs 0.931).
-- **Boosting vs bagging:** XGBoost had the best CV score but the same test score as Random Forest (0.970 vs 0.971). No measurable gain from boosting here.
+- **Bagging vs single tree:** Random Forest beats the Decision Tree (test macro-F1 0.978 vs 0.949; CV 0.985 vs 0.931).
+- **Boosting vs bagging:** XGBoost had the best CV score and ROC-AUC but a slightly lower test macro-F1 than Random Forest (0.970 vs 0.978). No measurable gain from boosting here.
 - KNN overfits most (gap 0.069) and is weakest.
-- The validation set (66 patients) picked Random Forest, but Logistic Regression scored higher on test. This shows how noisy a 66-patient validation choice is.
+- The 66-patient validation set could not separate the top three models, which shows how noisy a small validation set is.
 - Log-loss separates models more than accuracy: the tree and KNN give overconfident probabilities.
-- An earlier 80/20 run (no validation set, no XGBoost) gave a similar picture (RF and LR tied at about 0.98), so the conclusion does not depend on the exact split.
 
 **Q59. If two models tie, how do we choose?**
-Honestly: say they tie. Statistics cannot separate them at this sample size. A reasonable tie-breaker is parsimony: logistic regression is simpler, faster and more interpretable than a forest, and here it also had the highest test macro-F1. Our recommendation is Logistic Regression as the main model, with Random Forest (the validation-selected model) as the ensemble.
+Honestly: say they tie. Statistics cannot separate them at this sample size. Our tie-breaker is parsimony: logistic regression is simpler, faster and more interpretable than a forest, so it comes first in the model list and wins ties. It was chosen on the validation set before the test set was opened, and it also happened to have the highest test macro-F1.
 
 **Q60. Why are the scores so high? Is it too good to be true?**
 IDH-mutant tumours have a strong, well-known expression signature, so the 3-way split is relatively easy. The test set is small and from one cohort, so the scores should not be read as proof of generalisation to other hospitals. Part of what is learned may also be tumour grade, since IDHwt is mostly grade 4.
 
 **Q61. What do the top genes mean?**
-The Random Forest importance plot lists, in order: RBP1, KIAA0495, PSMB2, MIER1, FBXO42, CSDE1, FBXO17, TMEM167B, FKBP9, EMP3. Six of them (RBP1, KIAA0495, FBXO17, TMEM167B, FKBP9, EMP3) also appear in the ANOVA top-30 heatmap from the EDA, so the forest and the univariate test agree. We looked up their chromosome locations (NCBI Gene): six lie on 1p (KIAA0495/GFOD3P 1p36.32, PSMB2 1p34.3, MIER1 1p31.3, FBXO42 1p36.13, CSDE1 1p13.2, TMEM167B 1p13.3) and two on 19q (FBXO17 19q13.2, EMP3 19q13.33), so 8 of the 10 sit on the arms lost in the 1p/19q codeletion. RBP1 (3q23) is known to be silenced by DNA hypermethylation in IDH-mutant gliomas (Chou et al., JNCI 2012). This fits the model picking up real biology, but importances do not prove biological mechanism, and they are biased toward high-variance genes and split credit among correlated genes.
+The Random Forest importance plot lists, in order: RBP1, KIAA0495, PSMB2, FBXO42, FKBP9, MIER1, EMP3, FBXO17, LRRC41, CSDE1. We looked up their chromosome locations (NCBI Gene): six lie on 1p (KIAA0495/GFOD3P 1p36.32, PSMB2 1p34.3, FBXO42 1p36.13, MIER1 1p31.3, LRRC41 1p33, CSDE1 1p13.2) and two on 19q (EMP3 19q13.33, FBXO17 19q13.2), so 8 of the 10 sit on the arms lost in the 1p/19q codeletion. RBP1 (3q23) is known to be silenced by DNA hypermethylation in IDH-mutant gliomas (Chou et al., JNCI 2012). The pattern is consistent with the biological effects of 1p/19q codeletion, but importances do not prove biological mechanism, they are biased toward high-variance genes, and correlated genes split credit between them. The Random Forest is used for this check because the selected Logistic Regression spreads small weights over thousands of correlated genes, which makes its coefficients harder to read.
 
 ---
 
@@ -412,7 +399,7 @@ The Random Forest importance plot lists, in order: RBP1, KIAA0495, PSMB2, MIER1,
 The project was deliberately simplified to two datasets and a flat notebook. These items are listed as next steps.
 
 **Q64. What would improve the project most?**
-An independent test cohort; wider tuning ranges; repeated cross-validation; adding SVMs; adding the chromosome-arm and pathway features from the synopsis.
+An independent test cohort; wider tuning ranges; repeated cross-validation; adding SVMs.
 
 ---
 
@@ -422,12 +409,12 @@ An independent test cohort; wider tuning ranges; repeated cross-validation; addi
 |---|---|
 | Types of learning, classification | supervised 3-class classification |
 | Sampling | stratified splitting |
-| Under/overfitting, bias-variance | section 8, train-test gap |
+| Under/overfitting, bias-variance | Steps 8 and 9, train-test gap |
 | Regularization | L2 in logistic regression, tree pruning, XGBoost penalties |
 | Logistic regression, decision tree, KNN | models 1 to 3 |
 | Ensemble: decision forest, bagging, boosting | Random Forest (bagging), XGBoost (boosting) |
 | Dimension reduction with PCA | EDA plot and the KNN pipeline |
-| Model validation: accuracy, confusion matrix, precision, recall, ROC, cross-validation, bootstrap, hyper-parameter tuning | sections 6 and 7.1 to 7.6 |
+| Model validation: accuracy, confusion matrix, precision, recall, ROC, cross-validation, bootstrap, hyper-parameter tuning | Steps 7 and 8 |
 | Not covered | SVM, Lasso, from-scratch implementations, clustering, Bayesian methods, neural networks, reinforcement learning |
 
 ---
@@ -436,7 +423,7 @@ An independent test cohort; wider tuning ranges; repeated cross-validation; addi
 
 **Q65. Why not use accuracy only?** Classes are unequal; macro-F1 and balanced accuracy weigh each class equally.
 **Q66. What is p >> n and why is it dangerous?** More features (20,330) than samples (654). Models can fit noise perfectly, so they overfit.
-**Q67. What is data leakage and how did you avoid it?** Information from test data influencing training. We split first, learned the gene filter on training patients only, and put scalers/PCA inside pipelines so they are fitted per fold.
+**Q67. What is data leakage and how did you avoid it?** Information from test data influencing training. We split first, and put the gene filter, scalers and PCA inside the pipelines so they are re-fitted on the training part of every fold.
 **Q68. Why not do the log transform after splitting?** It is a fixed formula with no learned parameters, so it cannot leak.
 **Q69. What is the difference between validation and test sets?** Validation chooses the model; test is used once for the final unbiased score.
 **Q70. Why is KNN usually worst here?** Distances in high dimensions are weak, and its best `k` is very small, which makes it noisy and prone to overfitting.
@@ -450,7 +437,7 @@ An independent test cohort; wider tuning ranges; repeated cross-validation; addi
 **Q78. What is stratification?** Keeping the same class proportions in each split or fold.
 **Q79. What is a confusion matrix?** A table of true vs predicted classes; the diagonal holds correct predictions.
 **Q80. What is ROC-AUC?** The probability that a random positive is ranked above a random negative. 0.5 is chance, 1.0 is perfect.
-**Q81. How would you improve it?** External validation, wider tuning ranges, repeated or nested CV, SVMs, biologically derived features.
+**Q81. How would you improve it?** External validation, wider tuning ranges, repeated or nested CV, SVMs.
 **Q82. Can this be used clinically?** No. It is a research exercise on one retrospective cohort and is not validated for diagnosis.
 
 ---
@@ -463,16 +450,17 @@ An independent test cohort; wider tuning ranges; repeated cross-validation; addi
 3. Demo app: `python app/train_models.py`, then `python -m streamlit run app/app.py`.
 
 **Q84. How long does it take?**
-The cross-validated searches dominate. The full run took about 76 minutes on a 16-core CPU (the four non-XGBoost searches took about 9-19 minutes; the XGBoost search with 160 fits is the slowest part). The first search (logistic regression) should finish in under a minute.
+The cross-validated searches dominate. The final run took about 82 minutes with `N_JOBS = 6` on an 8-core laptop; the XGBoost search (160 fits) took about an hour of that. Each parallel worker needs about 1 GB of memory, so lower `N_JOBS` in the Setup cell if memory runs out.
 
 **Q85. Why is the GPU not used?**
-scikit-learn runs on the CPU only, and at this data size (a few hundred patients) a GPU would help little. XGBoost can use a GPU but it is not set up here.
+scikit-learn runs on the CPU only, and at this data size (a few hundred patients) a GPU would help little. XGBoost can use a GPU, but it is kept on the CPU so the notebook and the demo app give identical numbers.
 
 **Q86. Problems met while building, and the fixes**
 - Logistic regression with L1 and the `saga` solver never finished: switched to L2 with `lbfgs`.
 - XGBoost rejected string labels: labels are encoded as integers 0/1/2 for all models.
 - Silent notebook failures came from a bug in the build script, not from the models.
 - Parallel runs oversubscribed the CPU: worker math threads are pinned to one with `OMP_NUM_THREADS=1`.
+- Runs with too many parallel workers ran out of memory: the number of workers is now one setting, `N_JOBS`.
 
 **Q87. Where are the processed datasets?**
 There are none. The joined and filtered tables exist only in memory while the notebook runs, and `data/processed/` is empty. A cell can be added to save them as CSV or parquet if needed.

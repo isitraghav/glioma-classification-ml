@@ -42,7 +42,7 @@ st.caption("Predicts the IDH/1p19q molecular subtype of an adult diffuse glioma 
 with st.sidebar:
     st.header("Settings")
     model_name = st.selectbox("Model", list(models), index=0,
-                              help="Random Forest was selected on the validation set.")
+                              help="Logistic Regression was selected on the validation set.")
     s = bundle["scores"][model_name]
     st.metric("Held-out test accuracy", f"{s['test_accuracy']:.3f}")
     st.metric("Held-out test macro-F1", f"{s['test_macro_f1']:.3f}")
