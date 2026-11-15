@@ -27,43 +27,22 @@ TEAM = [("Raghav Yadav", "240598"), ("Darshita Yadav", "240981"), ("Prerit Shriv
 # ----------------------------------------------------------------------------- references (IEEE style)
 REFS = [
     ("louis", 'D. N. Louis et al., "The 2021 WHO Classification of Tumors of the Central Nervous System: a summary," Neuro-Oncology, vol. 23, no. 8, pp. 1231-1251, 2021, doi: 10.1093/neuonc/noab106.'),
-    ("ostrom", 'Q. T. Ostrom et al., "CBTRUS Statistical Report: Primary Brain and Other Central Nervous System Tumors Diagnosed in the United States in 2016-2020," Neuro-Oncology, vol. 25, suppl. 4, pp. iv1-iv99, 2023.'),
     ("ceccarelli", 'M. Ceccarelli et al., "Molecular profiling reveals biologically discrete subsets and pathways of progression in diffuse glioma," Cell, vol. 164, no. 3, pp. 550-563, 2016, doi: 10.1016/j.cell.2015.12.028.'),
     ("brat", 'Cancer Genome Atlas Research Network (D. J. Brat et al.), "Comprehensive, integrative genomic analysis of diffuse lower-grade gliomas," N. Engl. J. Med., vol. 372, no. 26, pp. 2481-2498, 2015, doi: 10.1056/NEJMoa1402121.'),
     ("verhaak", 'R. G. W. Verhaak et al., "Integrated genomic analysis identifies clinically relevant subtypes of glioblastoma characterized by abnormalities in PDGFRA, IDH1, EGFR, and NF1," Cancer Cell, vol. 17, no. 1, pp. 98-110, 2010, doi: 10.1016/j.ccr.2009.12.020.'),
     ("yan", 'H. Yan et al., "IDH1 and IDH2 mutations in gliomas," N. Engl. J. Med., vol. 360, no. 8, pp. 765-773, 2009, doi: 10.1056/NEJMoa0808710.'),
     ("noushmehr", 'H. Noushmehr et al., "Identification of a CpG island methylator phenotype that defines a distinct subgroup of glioma," Cancer Cell, vol. 17, no. 5, pp. 510-522, 2010, doi: 10.1016/j.ccr.2010.03.017.'),
-    ("cairncross", 'J. G. Cairncross et al., "Specific genetic predictors of chemotherapeutic response and survival in patients with anaplastic oligodendrogliomas," J. Natl. Cancer Inst., vol. 90, no. 19, pp. 1473-1479, 1998.'),
     ("capper", 'D. Capper et al., "DNA methylation-based classification of central nervous system tumours," Nature, vol. 555, pp. 469-474, 2018, doi: 10.1038/nature26000.'),
     ("wang", 'Z.-L. Wang, Z. Zhao, Z. Wang, C.-B. Zhang and T. Jiang, "Predicting chromosome 1p/19q codeletion by RNA expression profile: a comparison of current prediction models," Aging, vol. 11, no. 3, pp. 974-985, 2019, doi: 10.18632/aging.101795.'),
     ("chen19", 'S. C.-C. Chen, C.-M. Lo, S.-H. Wang and E. C.-Y. Su, "RNA editing-based classification of diffuse gliomas: predicting isocitrate dehydrogenase mutation and chromosome 1p/19q codeletion," BMC Bioinformatics, vol. 20, suppl. 19, art. 659, 2019, doi: 10.1186/s12859-019-3236-0.'),
     ("tasci", 'E. Tasci, Y. Zhuge, H. Kaur, K. Camphausen and A. V. Krauze, "Hierarchical voting-based feature selection and ensemble learning model scheme for glioma grading with clinical and molecular characteristics," Int. J. Mol. Sci., vol. 23, no. 22, art. 14155, 2022, doi: 10.3390/ijms232214155.'),
     ("munquad", 'S. Munquad, T. Si, S. Mallik, A. B. Das and Z. Zhao, "A deep learning-based framework for supporting clinical diagnosis of glioblastoma subtypes," Front. Genet., vol. 13, art. 855420, 2022, doi: 10.3389/fgene.2022.855420.'),
     ("chou", 'A. P. Chou et al., "Identification of retinol binding protein 1 promoter hypermethylation in isocitrate dehydrogenase 1 and 2 mutant gliomas," J. Natl. Cancer Inst., vol. 104, no. 19, pp. 1458-1469, 2012, doi: 10.1093/jnci/djs357.'),
-    ("rsem", 'B. Li and C. N. Dewey, "RSEM: accurate transcript quantification from RNA-Seq data with or without a reference genome," BMC Bioinformatics, vol. 12, art. 323, 2011, doi: 10.1186/1471-2105-12-323.'),
     ("gdc", 'NCI Genomic Data Commons, "LGG-GBM 2016 publication page (Ceccarelli et al., Cell 2016)," https://gdc.cancer.gov/about-data/publications/lgggbm_2016 (accessed Nov. 2026).'),
     ("esl", 'T. Hastie, R. Tibshirani and J. Friedman, The Elements of Statistical Learning, 2nd ed. New York: Springer, 2009.'),
-    ("ambroise", 'C. Ambroise and G. J. McLachlan, "Selection bias in gene extraction on the basis of microarray gene-expression data," Proc. Natl. Acad. Sci. USA, vol. 99, no. 10, pp. 6562-6566, 2002.'),
     ("varma", 'S. Varma and R. Simon, "Bias in error estimation when using cross-validation for model selection," BMC Bioinformatics, vol. 7, art. 91, 2006.'),
-    ("kohavi", 'R. Kohavi, "A study of cross-validation and bootstrap for accuracy estimation and model selection," in Proc. IJCAI, 1995, pp. 1137-1145.'),
-    ("lecessie", 'S. le Cessie and J. C. van Houwelingen, "Ridge estimators in logistic regression," J. R. Stat. Soc. Ser. C (Appl. Stat.), vol. 41, no. 1, pp. 191-201, 1992.'),
-    ("cart", 'L. Breiman, J. Friedman, R. Olshen and C. Stone, Classification and Regression Trees. Belmont, CA: Wadsworth, 1984.'),
-    ("knn", 'T. Cover and P. Hart, "Nearest neighbor pattern classification," IEEE Trans. Inf. Theory, vol. 13, no. 1, pp. 21-27, 1967.'),
-    ("pca", 'I. T. Jolliffe and J. Cadima, "Principal component analysis: a review and recent developments," Phil. Trans. R. Soc. A, vol. 374, art. 20150202, 2016.'),
     ("rf", 'L. Breiman, "Random forests," Machine Learning, vol. 45, no. 1, pp. 5-32, 2001.'),
     ("xgb", 'T. Chen and C. Guestrin, "XGBoost: a scalable tree boosting system," in Proc. 22nd ACM SIGKDD, 2016, pp. 785-794, doi: 10.1145/2939672.2939785.'),
-    ("sokolova", 'M. Sokolova and G. Lapalme, "A systematic analysis of performance measures for classification tasks," Inf. Process. Manage., vol. 45, no. 4, pp. 427-437, 2009.'),
-    ("chicco", 'D. Chicco and G. Jurman, "The advantages of the Matthews correlation coefficient (MCC) over F1 score and accuracy in binary classification evaluation," BMC Genomics, vol. 21, art. 6, 2020.'),
-    ("saito", 'T. Saito and M. Rehmsmeier, "The precision-recall plot is more informative than the ROC plot when evaluating binary classifiers on imbalanced datasets," PLoS ONE, vol. 10, no. 3, e0118432, 2015.'),
-    ("efron", 'B. Efron and R. J. Tibshirani, An Introduction to the Bootstrap. New York: Chapman & Hall, 1993.'),
-    ("strobl", 'C. Strobl, A.-L. Boulesteix, A. Zeileis and T. Hothorn, "Bias in random forest variable importance measures: illustrations, sources and a solution," BMC Bioinformatics, vol. 8, art. 25, 2007.'),
-    ("combat", 'W. E. Johnson, C. Li and A. Rabinovic, "Adjusting batch effects in microarray expression data using empirical Bayes methods," Biostatistics, vol. 8, no. 1, pp. 118-127, 2007.'),
-    ("cgga", 'Z. Zhao et al., "Chinese Glioma Genome Atlas (CGGA): a comprehensive resource with functional genomic data from Chinese glioma patients," Genomics Proteomics Bioinformatics, vol. 19, no. 1, pp. 1-12, 2021.'),
-    ("sklearn", 'F. Pedregosa et al., "Scikit-learn: machine learning in Python," J. Mach. Learn. Res., vol. 12, pp. 2825-2830, 2011.'),
-    ("numpy", 'C. R. Harris et al., "Array programming with NumPy," Nature, vol. 585, pp. 357-362, 2020.'),
-    ("pandas", 'W. McKinney, "Data structures for statistical computing in Python," in Proc. 9th Python in Science Conf., 2010, pp. 56-61.'),
-    ("mpl", 'J. D. Hunter, "Matplotlib: a 2D graphics environment," Comput. Sci. Eng., vol. 9, no. 3, pp. 90-95, 2007.'),
-    ("streamlit", 'Streamlit Inc., "Streamlit: a faster way to build and share data apps," https://streamlit.io (accessed Nov. 2026).'),
 ]
 REF_NUM = {k: i + 1 for i, (k, _) in enumerate(REFS)}
 
@@ -178,12 +157,12 @@ class Cursor:
                 p = cell.paragraphs[0]
                 pf = p.paragraph_format
                 pf.space_before, pf.space_after, pf.line_spacing = Pt(2), Pt(2), 1.0
-                p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER if val == "●" else WD_ALIGN_PARAGRAPH.LEFT
                 if len(rows) <= 14 and i < len(rows) - 1:
                     pf.keep_with_next = True
                 self.runs(p, str(val), bold=(i == 0), size=SMALL)
                 if i == 0:
-                    shade(cell, "D9E2F3")
+                    shade(cell, "D9D9D9")
         self.para("", size=SMALL, space_after=6)
         return self.tab_no
 
@@ -394,15 +373,15 @@ def write_intro(c):
            "validation set, and the final scores come from a 20% test set that was never used before. The "
            "chosen random forest classified 127 of 131 test patients correctly (accuracy 0.969, macro-F1 "
            "0.971). Logistic regression did slightly better (macro-F1 0.984). Eight of the ten genes the "
-           "random forest relies on most sit on chromosome 1p or 19q, which shows the model is picking up "
-           "real tumour biology.")
+           "random forest relies on most sit on chromosome 1p or 19q, a pattern consistent with the known "
+           "effects of 1p/19q codeletion.")
     c.sub("1.1 Background")
-    c.para("Gliomas are the most common cancer that starts in the brain in adults {ostrom}. For a long time "
+    c.para("Gliomas are the most common cancer that starts in the brain in adults. For a long time "
            "they were typed only by looking at tumour tissue under a microscope. Large genetic studies later "
            "showed that a few changes in the tumour's DNA say much more about how it will behave. Most "
            "slower-growing gliomas carry a mutation in the IDH1 or IDH2 gene {yan}. This mutation switches off "
            "many genes across the genome {noushmehr}. When the tumour has also lost chromosome arms 1p and 19q, "
-           "it usually responds well to chemotherapy {cairncross}. Two TCGA studies {brat, ceccarelli} confirmed "
+           "it usually responds well to chemotherapy. Two TCGA studies {brat, ceccarelli} confirmed "
            "that these two changes split gliomas into clear groups, better than the microscope does.")
     c.para("The 2021 World Health Organization (WHO) classification made these changes part of the diagnosis "
            "{louis}. An adult diffuse glioma is now called one of three things: glioblastoma (no IDH mutation), "
@@ -414,22 +393,17 @@ def write_intro(c):
            "changes leave a trace in that data: the IDH mutation switches many genes off, and losing one copy "
            "of 1p and 19q lowers the activity of genes on those arms. If a model can read these traces, one "
            "test could replace several, or at least flag cases that need a second look.")
-    c.para("The problem is also a good machine-learning exercise. There are far more genes (features) than "
-           "patients (samples), so the main risk is a model that memorises the training data. Careful "
-           "regularisation and honest testing matter more than the choice of algorithm {esl, ambroise}.")
     c.sub("1.3 Objectives")
     c.bullets([
         "Build a model that predicts the glioma type (IDH and 1p/19q status) from tumour gene activity only.",
-        "Compare a simple baseline, two other single models and two ensembles under the same fair test.",
-        "Report results with measures that suit uneven class sizes, with confidence intervals, and check "
-        "which genes the model uses.",
-        "Deliver a notebook that anyone can re-run and a small web app that shows the model working.",
     ])
 
 
 def write_problem(c):
+    c.para("**Problem statement:** Predict a glioma's molecular type (IDHwt, IDHmut-non-codel or IDHmut-codel) "
+           "from tumour gene expression alone.")
     c.sub("2.1 Problem definition")
-    c.para("Each patient is described by the activity of 20,330 genes measured in their tumour {rsem}. Each "
+    c.para("Each patient is described by the activity of 20,330 genes measured in their tumour. Each "
            "patient also has a known type, taken from Table S1 of Ceccarelli et al. {ceccarelli}. The goal is to "
            "learn a rule that maps the gene values to the type, and that still works on new patients. This is "
            "a supervised classification problem with three classes (Table 1).")
@@ -439,17 +413,9 @@ def write_problem(c):
         ["IDHmut-non-codel", "IDH mutation, 1p/19q present", "Astrocytoma, IDH-mutant", "256"],
         ["IDHmut-codel", "IDH mutation, 1p/19q lost", "Oligodendroglioma, IDH-mutant, 1p/19q-codeleted", "169"],
     ], "The three classes and the WHO 2021 tumour types they match.", [1.4, 1.7, 2.5, 0.8])
-    c.para("The match with the WHO types is close but not exact. The TCGA labels are older than the 2021 rules, "
-           "and the IDHwt group also contains 85 lower-grade tumours that might be typed differently today {louis}.")
     c.sub("2.2 Challenges")
     c.bullets([
-        "**Too many features.** About 20,000 genes for only 654 patients. Without limits, a model can fit the "
-        "training patients perfectly and still fail on new ones {esl}.",
-        "**Uneven classes.** The smallest class has 169 patients and the largest 256, so plain accuracy can hide "
-        "poor results on the small class {sokolova}.",
         "**Skewed values.** Raw gene values range from 0 to almost 900,000, and many genes are zero in most tumours.",
-        "**Data leakage.** If genes are filtered or scaled using all patients, including the test patients, the "
-        "scores look better than they really are {ambroise, varma}.",
         "**Two similar classes.** Both IDH-mutant types share the same gene switch-off pattern {noushmehr}. They "
         "differ mainly in the 1p/19q loss.",
     ])
@@ -466,7 +432,7 @@ def write_dataset(c):
            "copies from Kaggle or other sites, and the raw files are never changed (Table 2).")
     c.table([
         ["File", "Content", "Size", "Use"],
-        ["LGG-GBM.gene_expression.normalized.txt", "Gene activity from RNA sequencing (RSEM values) {rsem}",
+        ["LGG-GBM.gene_expression.normalized.txt", "Gene activity from RNA sequencing (RSEM values)",
          "667 patients × 20,330 genes", "Features"],
         ["TableS1.PatientData.20151020.v3.xlsx", "Clinical and lab details for each patient",
          "1,122 patients × 51 columns", "Label; grade for EDA"],
@@ -483,9 +449,6 @@ def write_dataset(c):
         ["IDH/codel subtype (target)", "Category, 3 classes", "IDHwt, IDHmut-non-codel, IDHmut-codel; coded as 0, 1, 2", "IDHmut-codel"],
         ["Grade (EDA only)", "Category, ordered", "WHO grade G2, G3 or G4; not given to the models", "G3"],
     ], "Features, target and data types.", [1.6, 1.4, 2.6, 1.1])
-    c.para("A few gene columns use number IDs (for example 100133144) because those genes had no official name in "
-           "2015, and some names are now outdated (for example A2BP1 is now called RBFOX1). Since we use only one "
-           "dataset, we kept the names as they are.")
     c.sub("3.4 Class balance")
     c.table([
         ["Class", "Patients", "Share", "Grade 2", "Grade 3", "Grade 4"],
@@ -544,18 +507,21 @@ def write_lit(c):
 
 def write_method(c):
     c.para("Table 6 shows the full pipeline. Every step that learns from the data (gene filter, scaling, PCA, "
-           "model training and tuning) uses the training patients only. This avoids the data leakage problem "
-           "described by Ambroise and McLachlan {ambroise} and Varma and Simon {varma}.")
+           "model training and tuning) uses the training patients only. The gene filter, scaler and PCA are steps "
+           "inside each model's scikit-learn pipeline, so during cross-validation they are re-fitted on the "
+           "training part of every fold and never see that fold's held-out patients. This avoids the data leakage problem "
+           "described by Varma and Simon {varma}.")
     c.table([
         ["Step", "What happens", "Data used"],
         ["1. Load and join", "Read both files and match patients by TCGA ID; drop patients without a label", "All files"],
         ["2. EDA", "Class balance, data quality, value ranges, PCA, grade table, top genes", "All 654 (only to describe)"],
         ["3. Transform", "log2(x + 1) on every value (fixed formula, learns nothing)", "All"],
         ["4. Split", "70% train / 10% validation / 20% test, same class mix in each, seed 42", "All"],
-        ["5. Filter", "Keep genes active (> 0) in at least 20% of training patients: 17,963 genes", "Train only"],
+        ["5. Filter", "Keep genes active (> 0) in at least 20% of the patients the pipeline is fitted on "
+         "(17,963 genes on the full training set)", "Train only, re-fitted in each CV fold"],
         ["6. Tune", "Try every setting in a grid with 5-fold cross-validation, scored by macro-F1", "Train only"],
         ["7. Select", "Pick the model with the best macro-F1 on the validation set", "Validation"],
-        ["8. Evaluate", "11 measures, confusion matrices, bootstrap confidence intervals, top genes", "Test (used once)"],
+        ["8. Evaluate", "Accuracy, macro-F1, ROC-AUC, confusion matrices, confidence intervals, top genes", "Test (used once)"],
         ["9. Demo app", "Re-train the tuned models, save them and serve them in a Streamlit app", "Train"],
     ], "The full pipeline.", [1.3, 3.8, 1.4])
 
@@ -580,17 +546,11 @@ def write_method(c):
            "inactive genes. This transform is standard for RNA sequencing data {esl}.")
     c.figure(FIG + "cell19.png", "The first two principal components of the log-transformed data, coloured by class.",
              width=4.5)
-    c.para("Principal component analysis (PCA) {pca} squeezes the 20,000 genes into a few summary directions. In "
+    c.para("Principal component analysis (PCA) squeezes the 20,000 genes into a few summary directions. In "
            "Figure 3, IDHwt tumours form their own cloud, which fits the large gene switch-off caused by the IDH "
            "mutation {noushmehr}. The two IDH-mutant classes overlap, so telling them apart needs information "
            "spread over many genes, mainly the lower activity of genes on 1p and 19q.")
-    c.figure(FIG + "cell21.png", "Share of patients in which each gene is active (> 0). The dashed line is the 20% "
-             "cut-off used by the filter.", width=4.5)
-    c.figure(FIG + "cell23.png", "The 30 genes that differ most between the classes (ANOVA F-score), with patients "
-             "sorted by class. Used only to describe the data, not to choose features.", width=5.5)
-    c.para("The heatmap (Figure 5) shows a clear block pattern. IDHwt tumours have high activity of CHI3L1, PDPN "
-           "and EMP3, which are known glioblastoma genes. The two IDH-mutant classes look alike and differ in a "
-           "smaller set of genes, such as TMEM167B on chromosome 1p. Table 4 also shows that grade and type are "
+    c.para("Table 4 shows that grade and type are "
            "linked: IDHwt tumours are mostly grade 4, and IDHmut-codel tumours never are. A model could partly "
            "learn tumour severity instead of type. We come back to this in Section 9.")
 
@@ -599,13 +559,16 @@ def write_method(c):
         "**log2(x + 1).** Applied to every value. It is a fixed formula, so it cannot leak test information.",
         "**Split first.** 20% of patients go to the test set, then 10% of all patients go to the validation set. "
         "Both keep the same class mix (Table 8).",
-        "**Gene filter (training patients only).** Genes active in fewer than 20% of training patients are "
-        "removed: 20,330 genes become 17,963. The same genes are then kept for validation and test.",
+        "**Gene filter (first pipeline step).** Genes active in fewer than 20% of the patients the pipeline is "
+        "fitted on are removed. It is written as a small scikit-learn transformer and placed first in every "
+        "model's pipeline, so each cross-validation fold learns its own gene list from its training part only. "
+        "Fitted on all 457 training patients, it keeps 17,963 of the 20,330 genes, and that same list is "
+        "then applied to the validation and test patients.",
         "**Scaling.** Logistic regression and KNN need genes on the same scale, so each gene is standardised. "
         "The scaler sits inside a scikit-learn pipeline, so in cross-validation it only sees the training part "
-        "of each fold {sklearn}.",
+        "of each fold.",
         "**PCA for KNN.** Distances stop being useful with thousands of genes, so KNN works on 10 or 30 "
-        "principal components {pca, esl}.",
+        "principal components {esl}.",
         "**Labels as numbers.** IDHwt = 0, IDHmut-non-codel = 1, IDHmut-codel = 2.",
     ])
     c.table([
@@ -615,23 +578,18 @@ def write_method(c):
         ["IDHmut-codel", "118", "17", "34"],
         ["Total", "457 (70%)", "66 (10%)", "131 (20%)"],
     ], "Patients per class in the three sets.", [2.0, 1.5, 1.5, 1.5])
-    c.para("We did not pick genes using the labels (for example the top genes by ANOVA score), and we did not "
-           "build summary features such as chromosome-arm scores. Picking genes with the labels must be done "
-           "inside cross-validation to stay fair {ambroise}, and the regularised models already handle all "
-           "genes well. Both ideas are listed as future work.")
 
     c.sub("5.3 Baseline model: logistic regression")
-    c.para("Our baseline is multinomial logistic regression with an L2 (ridge) penalty {lecessie}. It is the usual "
-           "first choice for gene data for three reasons: it is a simple linear model that is hard to overfit "
-           "once penalised, its weights show how much each gene matters, and its probabilities are usually "
-           "reliable. The setting C controls the penalty: a smaller C pushes all gene weights closer to zero "
+    c.para("Our baseline is multinomial logistic regression with an L2 (ridge) penalty. It is the usual "
+           "first choice for gene data for three reasons: it is simple, it is hard to overfit once "
+           "penalised, and its weights show how much each gene matters. The setting C controls the penalty: a smaller C pushes all gene weights closer to zero "
            "{esl}. We tried C = 0.0001, 0.001, 0.01, 0.1 and 1.")
     c.sub("5.4 Models used for comparison")
     c.bullets([
-        "**Decision tree** {cart}. A set of yes/no rules on single genes. It is easy to read and it is the "
+        "**Decision tree**. A set of yes/no rules on single genes. It is easy to read and it is the "
         "building block of both ensembles, so it shows how much the ensembles add. We limited its depth "
         "(3, 5, 8 or no limit), the smallest leaf size (1, 5 or 15) and the pruning strength (0, 0.005 or 0.02).",
-        "**k-nearest neighbours (KNN)** {knn}. Gives a new tumour the most common type among its closest "
+        "**k-nearest neighbours (KNN)**. Gives a new tumour the most common type among its closest "
         "training tumours. It tests whether similar tumours share a type. We tried 10 or 30 PCA components, "
         "k = 3, 7, 15 or 25 neighbours, and equal or distance-based voting.",
     ])
@@ -647,47 +605,30 @@ def write_method(c):
     ])
     c.sub("5.6 Tuning and model selection")
     c.para("For each model we tried every setting in its grid using 5-fold stratified cross-validation on the 457 "
-           "training patients, scored by macro-F1 {kohavi}. The best setting was re-trained on all training "
+           "training patients, scored by macro-F1. The best setting was re-trained on all training "
            "patients. The five tuned models were then compared on the 66 validation patients, and the one with "
            "the best validation macro-F1 became the final model. The 131 test patients were used only once, "
            "after every choice had been made.")
     c.sub("5.7 Evaluation measures")
-    c.para("Because the classes have different sizes, we report several measures {sokolova}. **Macro-F1** is the "
-           "main one: it averages the F1 score of each class, so every class counts equally. We also report "
-           "accuracy, balanced accuracy, precision and recall; ROC-AUC and PR-AUC, which judge the predicted "
-           "probabilities {saito}; the Matthews correlation coefficient (MCC), which stays fair with uneven "
-           "classes {chicco}; Cohen's kappa; and log-loss. The **overfit gap** is training accuracy minus test "
-           "accuracy. To show how certain the test scores are, we resampled the test set 1,000 times and took the "
-           "middle 95% of the macro-F1 values as a confidence interval {efron}.")
+    c.para("Because the classes have different sizes, plain accuracy is not enough. **Macro-F1** is the "
+           "main measure: it averages the F1 score of each class, so every class counts equally. We also report "
+           "accuracy, balanced accuracy and ROC-AUC (how well the predicted probabilities rank the classes). The "
+           "**overfit gap** is training accuracy minus test accuracy. To show how certain the test scores are, we "
+           "resampled the test set 1,000 times and took the middle 95% of the macro-F1 values as a confidence "
+           "interval.")
 
 
 def write_tech(c):
     c.table([
         ["Area", "Tool", "Used for"],
         ["Language", "Python 3", "All analysis and the app"],
-        ["Data handling", "pandas {pandas}, NumPy {numpy}, openpyxl", "Reading the files, joining, number arrays"],
-        ["Machine learning", "scikit-learn {sklearn}", "Pipelines, scaling, PCA, LR, decision tree, KNN, random forest, grid search, metrics"],
-        ["Boosting", "XGBoost {xgb}", "XGBoost classifier"],
-        ["Charts", "Matplotlib {mpl}", "EDA plots, confusion matrices, gene importance"],
+        ["Data handling", "pandas, NumPy, openpyxl", "Reading the files, joining, number arrays"],
+        ["Machine learning", "scikit-learn, XGBoost {xgb}", "Pipelines, scaling, PCA, LR, decision tree, KNN, random forest, XGBoost, grid search, metrics"],
+        ["Charts", "Matplotlib", "EDA plots, confusion matrices, gene importance"],
         ["Notebook", "Jupyter", "glioma_analysis.ipynb, the full analysis"],
         ["Saving models", "joblib", "Storing the five tuned models for the app"],
-        ["Web app", "Streamlit {streamlit}", "Interactive demo (app/app.py)"],
-        ["Version control", "Git", "Project history"],
+        ["Web app", "Streamlit", "Interactive demo (app/app.py)"],
     ], "Technology stack.", [1.4, 2.1, 3.0])
-    c.sub("6.1 Code files")
-    c.bullets([
-        "**glioma_analysis.ipynb:** loading, EDA, data preparation, models, tuning, selection, testing and "
-        "conclusions. A full run takes about 30 to 75 minutes on a laptop, mostly for the grid searches.",
-        "**app/train_models.py:** repeats the notebook's split and filter and re-trains the five models with "
-        "the best settings found in the notebook. It gives exactly the same test scores as the notebook.",
-        "**app/app.py:** the Streamlit app, with three views: one test patient, upload a CSV file, and the whole "
-        "test set.",
-    ])
-    c.sub("6.2 How to run")
-    c.code("pip install -r requirements.txt\n"
-           "jupyter notebook glioma_analysis.ipynb                  # run all cells\n"
-           "python app/train_models.py                              # save the tuned models\n"
-           "python -m streamlit run app/app.py --server.headless true  # open http://localhost:8501")
 
 
 def write_results(c):
@@ -703,8 +644,7 @@ def write_results(c):
     c.para("Every model chose strong regularisation. Logistic regression picked C = 0.001, a heavy penalty: with "
            "almost 18,000 genes, many small weights work better than a few large ones. The decision tree picked "
            "a depth of only 3 with at least 15 patients per leaf. XGBoost picked its most careful settings "
-           "(depth 2, learning rate 0.05, 20% of genes per tree), and the random forest preferred larger leaves. "
-           "Some best values sit at the edge of the grid (C, tree depth, k), so a wider grid might help a little.")
+           "(depth 2, learning rate 0.05, 20% of genes per tree), and the random forest preferred larger leaves.")
     c.sub("7.2 Choosing the final model")
     c.table([
         ["Model", "CV macro-F1", "Validation accuracy", "Validation macro-F1"],
@@ -719,33 +659,25 @@ def write_results(c):
            "so the top three models are really tied at this stage.")
     c.sub("7.3 Results on the test set")
     c.table([
-        ["Model", "Acc.", "Bal. acc.", "Macro-F1", "ROC-AUC", "PR-AUC", "MCC", "Log-loss", "Gap"],
-        ["Logistic Regression", "0.985", "0.987", "0.984", "0.992", "0.980", "0.977", "0.098", "0.015"],
-        ["**Random Forest (chosen)**", "0.969", "0.972", "0.971", "0.997", "0.993", "0.954", "0.135", "0.028"],
-        ["XGBoost", "0.969", "0.972", "0.970", "0.999", "0.998", "0.954", "0.077", "0.031"],
-        ["Decision Tree", "0.947", "0.952", "0.949", "0.956", "0.916", "0.919", "1.960", "0.012"],
-        ["KNN", "0.931", "0.935", "0.934", "0.972", "0.952", "0.896", "1.440", "0.069"],
-    ], "Results on the 131 test patients (Acc. = accuracy; Bal. acc. = balanced accuracy; "
-       "Gap = training accuracy − test accuracy).",
-        [1.9, 0.6, 0.65, 0.75, 0.75, 0.7, 0.6, 0.7, 0.6])
-    c.para("Precision and recall (macro average) and Cohen's kappa follow the same order: Logistic Regression "
-           "0.981 / 0.987 / 0.977, Random Forest 0.970 / 0.972 / 0.954, XGBoost 0.968 / 0.972 / 0.954, Decision "
-           "Tree 0.947 / 0.952 / 0.919 and KNN 0.933 / 0.935 / 0.896.")
-    c.figure(FIG + "test_f1_ci.png", "Test macro-F1 with 95% bootstrap confidence intervals (1,000 resamples).", width=6.0)
+        ["Model", "Accuracy", "Bal. accuracy", "Macro-F1", "ROC-AUC", "Overfit gap"],
+        ["Logistic Regression", "0.985", "0.987", "0.984", "0.992", "0.015"],
+        ["**Random Forest (chosen)**", "0.969", "0.972", "0.971", "0.997", "0.028"],
+        ["XGBoost", "0.969", "0.972", "0.970", "0.999", "0.031"],
+        ["Decision Tree", "0.947", "0.952", "0.949", "0.956", "0.012"],
+        ["KNN", "0.931", "0.935", "0.934", "0.972", "0.069"],
+    ], "Results on the 131 test patients (overfit gap = training accuracy − test accuracy).",
+        [2.1, 0.9, 1.1, 0.9, 0.9, 1.0])
+    c.figure(FIG + "test_f1_ci.png", "Test accuracy (grey) and macro-F1 (blue) with 95% bootstrap confidence intervals (1,000 resamples).", width=6.0)
     c.para("On the 131 unseen test patients, the chosen random forest reached **0.969 accuracy and 0.971 "
            "macro-F1** (95% confidence interval 0.939 to 0.994), with ROC-AUC 0.997. Logistic regression scored "
            "highest on the test set (0.984), but it was not the validation pick, and we did not change our choice "
            "after seeing the test results. The confidence intervals of the top three models overlap almost "
-           "completely (Figure 6). On 131 patients one mistake is worth about 0.8 accuracy points, so the data "
+           "completely (Figure 4). On 131 patients one mistake is worth about 0.8 accuracy points, so the data "
            "cannot say which of the three is truly best.")
-    c.para("The probability-based measures add detail. XGBoost has the best ROC-AUC (0.999), PR-AUC (0.998) and "
-           "log-loss (0.077), so its probabilities are the most trustworthy even though it makes as many mistakes "
-           "as the forest. The decision tree and KNN have high log-loss (above 1.4) because they are sometimes "
-           "very sure and wrong.")
     c.figure(FIG + "cv_val_test.png", "Macro-F1 of each model in cross-validation, on the validation set and on "
              "the test set.", width=6.0)
     c.para("For the three strong models, cross-validation and test scores are within about 1.5 points of each "
-           "other (Figure 7), so the cross-validation results were reliable. The random forest's perfect "
+           "other (Figure 5), so the cross-validation results were reliable. The random forest's perfect "
            "validation score was partly luck, since its test score dropped back to its cross-validation level. "
            "KNN has the biggest overfit gap (0.069).")
     c.sub("7.4 Where the model makes mistakes")
@@ -772,10 +704,10 @@ def write_results(c):
     c.sub("7.5 Ensembles compared with single models")
     c.bullets([
         "**Random forest vs a single tree.** The forest raised test macro-F1 from 0.949 to 0.971 and ROC-AUC from "
-        "0.956 to 0.997, and cut log-loss from 1.96 to 0.14. Averaging many trees makes the result more stable "
+        "0.956 to 0.997. Averaging many trees makes the result more stable "
         "{rf}.",
-        "**XGBoost vs random forest.** They are tied on correct predictions (0.970 vs 0.971 macro-F1), and "
-        "XGBoost gives better probabilities. Boosting did not beat bagging on accuracy here.",
+        "**XGBoost vs random forest.** They are tied on correct predictions (0.970 vs 0.971 macro-F1). "
+        "Boosting did not beat bagging on accuracy here.",
         "**Linear vs tree-based models.** The penalised logistic regression did as well as, or better than, both "
         "ensembles. With many genes and few patients, a simple penalised model is very hard to beat {esl}.",
     ])
@@ -792,32 +724,44 @@ def write_results(c):
         ["FBXO17", "19q13.2", "On chromosome arm 19q"],
         ["TMEM167B", "1p13.3", "On chromosome arm 1p"],
         ["FKBP9", "7p14.3", "Chromosome 7, often gained in glioblastoma {louis}"],
-        ["EMP3", "19q13.33", "On chromosome arm 19q; high in IDHwt (Figure 5)"],
+        ["EMP3", "19q13.33", "On chromosome arm 19q; high in IDHwt"],
     ], "Location of the 10 most important genes (from NCBI Gene).", [1.6, 1.2, 3.7])
     c.para("The gene list makes biological sense. The top gene, RBP1, is known to be switched off in almost all "
            "IDH-mutant gliomas {chou}, so it is a natural marker of IDH status. **Eight of the ten genes sit on "
            "chromosome arm 1p (six) or 19q (two).** Tumours that have lost 1p and 19q keep only one copy of these "
-           "genes, so their activity drops. In other words, the forest found the 1p/19q loss by itself from gene "
-           "activity. Random-forest importance scores can be biased and are shared between similar genes {strobl}, "
-           "so the exact order should not be over-read, but the overall pattern is clear.")
+           "genes, so their activity drops. The importance pattern is therefore consistent with the "
+           "biological effects of 1p/19q codeletion. It is a plausibility check, not independent proof that the "
+           "model has detected the codeletion itself.")
     c.sub("7.7 Demo application")
-    c.para("We saved the tuned models and built a Streamlit app {streamlit} (Figures 10 to 12). The user picks a "
+    c.para("We saved the tuned models and built a Streamlit app (Figures 8 and 9). The user picks a "
            "test patient or uploads a file of gene values. The app applies the same log transform and gene list, "
            "and shows the predicted type, the matching WHO type and the probability of each class. Its "
            "whole-test-set view gives the same confusion matrix as the notebook.")
     c.figure(FIG + "demo_single.png", "Demo: prediction for test patient TCGA-06-0184 (grade 4), correctly predicted "
              "as IDHwt with 88.5% confidence.", width=6.0)
-    c.figure(FIG + "demo_upload_crop.png", "Demo: predictions for an uploaded CSV file of gene values.", width=6.0)
     c.figure(FIG + "demo_testset_crop.png", "Demo: confusion matrix and wrongly classified patients on the whole "
              "test set.", width=6.0)
 
 
 def write_team(c):
     c.para("Table 16 shows what each group member contributed to each activity.")
-    acts = ["Data preprocessing & EDA", "Feature engineering", "Model building", "Model comparisons", "Ensemble",
-            "Hyperparameter tuning / cross-validation", "Presentation / interface (UI)", "Deployment (demo app)",
-            "Documentation"]
-    c.table([["Activity"] + [f"{n} ({r})" for n, r in TEAM]] + [[a, "", "", "", "", ""] for a in acts],
+    # in the order the work was done; columns: Raghav, Darshita, Prerit, Saksham, Rayna
+    matrix = [
+        ("Literature review",                        (0, 1, 0, 0, 1)),
+        ("Data preprocessing & EDA",                 (1, 1, 0, 1, 0)),
+        ("Feature engineering",                      (1, 0, 1, 1, 0)),
+        ("Model building",                           (1, 1, 1, 1, 0)),
+        ("Ensemble",                                 (0, 0, 1, 0, 1)),
+        ("Hyperparameter tuning / cross-validation", (0, 0, 0, 0, 1)),
+        ("Model comparisons",                        (0, 1, 0, 1, 1)),
+        ("Model evaluation and testing",             (1, 0, 1, 0, 0)),
+        ("Interpreting results",                     (0, 1, 0, 0, 1)),
+        ("Demo",                                     (1, 0, 0, 0, 0)),
+        ("Report",                                   (1, 0, 0, 0, 0)),
+        ("Slides",                                   (1, 1, 1, 1, 1)),
+    ]
+    c.table([["Activity"] + [f"{n} ({r})" for n, r in TEAM]] +
+            [[a] + ["●" if m else "" for m in marks] for a, marks in matrix],
             "Team responsibility and self-contribution matrix.", [2.0, 0.9, 0.9, 0.9, 0.9, 0.9])
 
 
@@ -831,7 +775,7 @@ def write_concl(c):
         "Gene activity alone separates the three types, with test macro-F1 between 0.93 (KNN) and 0.98 "
         "(logistic regression). The chosen model never missed an IDHmut-codel tumour.",
         "The random forest clearly improved on a single decision tree (macro-F1 0.971 vs 0.949). XGBoost tied "
-        "with the random forest on accuracy but gave the most reliable probabilities.",
+        "with the random forest.",
         "With many genes and few patients, a simple penalised linear model works as well as any ensemble and "
         "is easier to explain.",
         "The model relies on real biology: RBP1, a gene switched off by the IDH mutation, and eight genes on "
@@ -840,24 +784,20 @@ def write_concl(c):
     c.sub("9.2 Limitations")
     c.bullets([
         "**One dataset only.** All patients come from TCGA. We have not tested the model on data from other "
-        "hospitals, which may differ because of lab and equipment effects {combat}.",
+        "hospitals, which may differ because of lab and equipment effects.",
         "**Small test sets.** The validation set (66 patients) cannot reliably separate models that differ by "
         "one patient, and one 131-patient test set gives wide confidence intervals.",
         "**Grade is linked to type.** IDHwt tumours are mostly grade 4 and IDHmut-codel tumours never are. "
         "Three of the four test mistakes are tumours where this link breaks.",
         "**Older labels.** The TCGA labels come from before the 2021 WHO rules, so a few IDHwt lower-grade "
         "tumours might be typed differently today.",
-        "**Small tuning grids.** Some best settings are at the edge of the grid, and the best cross-validation "
-        "score is slightly optimistic because it is the highest of many tries {varma}.",
         "**Not a medical tool.** The work is a student research project and has not been tested in a clinic.",
     ])
     c.sub("9.3 Future work")
     c.bullets([
-        "Test the TCGA-trained model on another dataset such as CGGA {cgga}, after matching gene names and "
-        "correcting batch effects {combat}.",
-        "Use repeated or nested cross-validation instead of one split {varma}, and compare models with "
-        "paired statistical tests.",
-        "Build smaller, easier-to-read features such as chromosome-arm scores and pathway scores.",
+        "Test the TCGA-trained model on another dataset such as CGGA, after matching gene names and "
+        "correcting batch effects.",
+        "Use repeated cross-validation instead of one fixed split {varma}.",
         "Check accuracy separately within each grade.",
         "Put the demo app online on a cloud platform.",
     ])
@@ -875,7 +815,7 @@ def write_refs(c):
 def write_appendix(c):
     c.sub("A. Key code from glioma_analysis.ipynb")
     c.para("The full notebook, with all outputs, is submitted with this report. The code below shows the data "
-           "split, the training-only gene filter and the model search.")
+           "split, the gene filter as a pipeline step and the model search.")
     c.code('''expr = pd.read_csv(RAW + "LGG-GBM.gene_expression.normalized.txt",
                    sep="\\t", index_col=0)
 meta = pd.read_excel(RAW + "TableS1.PatientData.20151020.v3.xlsx",
@@ -889,13 +829,21 @@ X_rest, X_te, y_rest, y_te = train_test_split(
     X_log, y, test_size=0.20, stratify=y, random_state=42)
 X_tr, X_va, y_tr, y_va = train_test_split(
     X_rest, y_rest, test_size=0.125, stratify=y_rest, random_state=42)
-keep = (X_tr > 0).mean() >= 0.2       # filter learned on TRAINING patients only
-X_tr, X_va, X_te = X_tr.loc[:, keep], X_va.loc[:, keep], X_te.loc[:, keep]''')
+class LowExpressionFilter(BaseEstimator, TransformerMixin):
+    """Keep genes expressed (> 0) in >= min_fraction of the patients seen in fit()."""
+    def __init__(self, min_fraction=0.2):
+        self.min_fraction = min_fraction
+    def fit(self, X, y=None):
+        self.keep_ = (np.asarray(X) > 0).mean(axis=0) >= self.min_fraction
+        return self
+    def transform(self, X):
+        return X.loc[:, self.keep_]''')
     c.code('''models["Logistic Regression"] = (
-    Pipeline([("scale", StandardScaler()),
+    Pipeline([("filter", LowExpressionFilter(0.2)),    # re-fitted in every CV fold
+              ("scale", StandardScaler()),
               ("clf", LogisticRegression(max_iter=500, random_state=42))]),
     {"clf__C": [0.0001, 0.001, 0.01, 0.1, 1]})
-# Decision Tree, KNN (scaler + PCA), Random Forest and XGBoost are defined the same way
+# Decision Tree, KNN (scaler + PCA), Random Forest and XGBoost also start with the filter
 
 cv = StratifiedKFold(5, shuffle=True, random_state=42)
 for name, (pipeline, grid) in models.items():
@@ -908,19 +856,13 @@ selected = val_table["Val macro-F1"].idxmax()   # choice uses the validation set
     c.code('''- Patients: 654 total -> 457 train / 66 validation / 131 test
 - Selected model (best validation macro-F1): Random Forest
 - Its test scores: accuracy 0.969, macro-F1 0.971 (95% CI 0.939-0.994),
-  ROC-AUC 0.997, MCC 0.954
+  ROC-AUC 0.997
 - Its overfit gap (train - test accuracy): 0.028
 - Bagging vs single tree (Random Forest vs Decision Tree): 0.971 vs 0.949
 - Boosting vs bagging (XGBoost vs Random Forest): 0.970 vs 0.971
 - Largest overfit gap: KNN (0.069); lowest test macro-F1: KNN (0.934)
 - Most frequent error: IDHwt predicted as IDHmut-non-codel (2 patients)''')
-    c.sub("C. Notebook output: bootstrap confidence intervals")
-    c.code('''Logistic Regression  macro-F1 = 0.984   95% CI [0.957, 1.000]
-Decision Tree        macro-F1 = 0.949   95% CI [0.908, 0.984]
-KNN                  macro-F1 = 0.934   95% CI [0.892, 0.971]
-Random Forest        macro-F1 = 0.971   95% CI [0.939, 0.994]
-XGBoost              macro-F1 = 0.970   95% CI [0.938, 0.993]''')
-    c.sub("D. Project files")
+    c.sub("C. Project files")
     c.bullets([
         "glioma_analysis.ipynb: the full analysis with outputs",
         "app/train_models.py and app/app.py: the demo app",

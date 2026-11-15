@@ -357,12 +357,12 @@ table(s, Inches(0.4), Inches(1.3), Inches(12.5), [["Activity"] + [f"{n}\n({r})" 
 # ---------------------------------------------------------------- Slide 12: Conclusions
 s = new_slide("Conclusions", notes=(
     "Answer the four research questions, then be honest about limits: single cohort, small evaluation sets, grade "
-    "confounding. Highlight the biology: 8 of the top 10 genes sit on the codeleted arms 1p/19q."))
+    "confounding. Highlight the biology: 8 of the top 10 genes sit on arms 1p/19q, consistent with (not proof of) codeletion."))
 box(s, Inches(0.5), Inches(1.3), Inches(6.2), Inches(5.5), "Key outcomes", [
     "Expression alone recovers the 3 WHO glioma types: selected RF test accuracy 0.969, macro-F1 0.971 (CI 0.939–0.994).",
     "Strongly regularised logistic regression matched the ensembles (0.984): with p ≫ n, simple and penalised wins.",
     "Bagging beat a single tree; boosting tied bagging but gave the best probabilities.",
-    "Biology: top gene RBP1 is silenced in IDH-mutant gliomas [17]; 8 of the top 10 genes lie on chromosome arms 1p/19q, so the model reads the codeletion's dosage effect.",
+    "Biology: top gene RBP1 is silenced in IDH-mutant gliomas [17]; 8 of the top 10 genes lie on chromosome arms 1p/19q, a pattern consistent with the effects of 1p/19q codeletion.",
 ], size=18)
 box(s, Inches(6.9), Inches(1.3), Inches(6.0), Inches(5.5), "Limitations and future work", [
     "One TCGA cohort, no external validation; next: CGGA [18] with batch correction [19].",
