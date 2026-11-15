@@ -749,12 +749,11 @@ def write_results(c):
     c.sub("7.7 Demo application")
     c.para("We saved the tuned models and built a Streamlit app (Figures 8 and 9). The user picks a "
            "test patient or uploads a file of gene values. The app applies the same log transform and gene list, "
-           "and shows the predicted type, the matching WHO type and the probability of each class. Its "
-           "whole-test-set view gives the same confusion matrix as the notebook.")
+           "and shows the predicted type, the matching WHO type and the probability of each class.")
     c.figure(FIG + "demo_single.png", "Demo: prediction for test patient TCGA-06-0184 (grade 4), correctly predicted "
              "as IDHwt with 99.6% confidence by the chosen logistic regression.", width=6.0)
-    c.figure(FIG + "demo_testset_crop.png", "Demo: confusion matrix and wrongly classified patients on the whole "
-             "test set.", width=6.0)
+    c.figure(FIG + "demo_upload_crop.png", "Demo: predictions for an uploaded file of raw gene values "
+             "(five test patients).", width=6.0)
 
 
 def write_team(c):

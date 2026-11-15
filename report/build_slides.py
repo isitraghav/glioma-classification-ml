@@ -149,7 +149,7 @@ box(s, Inches(6.85), Inches(1.4), Inches(6.0), Inches(4.6), "Deliverables", [
     "A fully reproducible Jupyter notebook: data merge, EDA, feature derivation, 5 tuned models, "
     "evaluation with 11 metrics and bootstrap confidence intervals.",
     "A working Streamlit demo app that predicts the glioma type of unseen patients (single patient, "
-    "CSV upload, whole test set), plus this report and presentation.",
+    "CSV upload), plus this report and presentation.",
 ], size=20)
 text(s, Inches(0.5), Inches(6.2), Inches(12.3), Inches(0.6),
      "Motivation: since WHO 2021, glioma type is defined by IDH mutation and 1p/19q codeletion [1]; each needs a separate lab test. "
@@ -329,23 +329,22 @@ for i, (t1, t2) in enumerate(steps):
         a.fill.solid(); a.fill.fore_color.rgb = ORANGE; a.line.fill.background()
 text(s, Inches(0.5), Inches(5.0), Inches(12.3), Inches(1.6), [
     "Run:  python app/train_models.py   →   python -m streamlit run app/app.py   →   http://localhost:8501",
-    "The app's whole-test-set view reproduces the notebook's confusion matrix exactly (accuracy 0.985).",
     "Next step: host on Streamlit Community Cloud or Hugging Face Spaces (models.joblib is 3.2 MB).",
 ], size=15, bullets=True)
 
 # ---------------------------------------------------------------- Slide 10: Demo screenshots
 s = new_slide("Demonstration: Streamlit App", notes=(
-    "Live demo order: 1) pick test patient TCGA-06-0184 -> IDHwt, 99.6%, correct. 2) Whole test set tab: confusion "
-    "matrix, 2 errors, both IDH-mutant astrocytomas called codeleted. 3) Upload a mock file from app/demo/."))
+    "Live demo order: 1) pick test patient TCGA-06-0184 -> IDHwt, 99.6%, correct. 2) Upload tab: "
+    "upload a mock file from app/demo/ and show the per-tumour predictions and probabilities."))
 picture(s, FIG + "demo_single.png", Inches(0.35), Inches(1.2), w=Inches(6.4))
-picture(s, FIG + "demo_testset_crop.png", Inches(6.95), Inches(1.2), w=Inches(6.0))
+picture(s, FIG + "demo_upload_crop.png", Inches(6.95), Inches(1.2), w=Inches(6.0))
 text(s, Inches(0.35), Inches(5.45), Inches(6.4), Inches(1.5), [
     "Single held-out patient: predicted IDHwt (glioblastoma) with 99.6% confidence; lab label agrees.",
     "Model selector shows each model's test accuracy and macro-F1.",
 ], size=13, bullets=True)
 text(s, Inches(6.95), Inches(5.45), Inches(6.0), Inches(1.5), [
-    "Whole test set: 129/131 correct; every IDHwt and IDHmut-codel tumour right.",
-    "Both errors: IDH-mutant astrocytomas called codeleted; one (TCGA-HT-8113, 47%) looks like an oligodendroglioma under the microscope.",
+    "File upload: raw RSEM values in, same log2 transform and gene list applied, one prediction per tumour.",
+    "Each row shows the predicted type and all three class probabilities; results can be downloaded as CSV.",
 ], size=13, bullets=True)
 
 # ---------------------------------------------------------------- Slide 11: Team matrix

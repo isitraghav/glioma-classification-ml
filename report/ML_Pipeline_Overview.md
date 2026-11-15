@@ -42,7 +42,6 @@ EDA uses all 654 patients, but only to describe the data. Nothing here feeds int
 | Sparsity | 183 genes all-zero, 1,879 genes > 90% zero | Low-expression filter |
 | Skew | Values from 0 to 884,605, median 519 | log2 transform |
 | PCA | IDHwt separates on PC1; the two IDH-mutant classes overlap | Expect errors between the IDH-mutant classes |
-| ANOVA top-30 genes | Clear blocks of genes per class | Descriptive only, never used for feature selection |
 | Class vs grade | IDHwt is mostly grade 4 | Noted as a confounder |
 
 ## Stage 4: Feature transformation
@@ -157,7 +156,6 @@ Each model is a scikit-learn `Pipeline`, so every learned step is fitted on trai
 - `app/app.py` is a Streamlit app.
 - **View 1:** pick a test patient and get the predicted type, the matching WHO type and each class's probability.
 - **View 2:** upload a raw RSEM CSV; the app applies the same log transform and gene list.
-- **View 3:** the whole test set, giving the same confusion matrix as the notebook, plus a list of misclassified patients.
 
 ## Stage 18: Documentation and reporting
 - **Notebook:** `glioma_analysis.ipynb` runs everything end to end.

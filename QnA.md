@@ -54,7 +54,7 @@ About 20,000 gene expression values per patient (654 patients after joining expr
 Classification (supervised, 3 classes), because the target is a category with no natural order or distance between classes.
 
 **Q6. What does "success" look like?**
-High macro-F1 on patients the model never saw, a small gap between training and test scores, and a model that relies on plausible biology and not noise (8 of the Random Forest's top-10 genes lie on 1p or 19q; see Q61).
+High macro-F1 on patients the model never saw, a small gap between training and test scores, and a model that relies on plausible biology and not noise (8 of the Random Forest's top-10 genes lie on 1p or 19q; see Q60).
 
 ---
 
@@ -109,7 +109,7 @@ glioma-classification-ml/
 │       └── TableS1.PatientData.20151020.v3.xlsx
 ├── app/
 │   ├── train_models.py        # re-fits the five tuned models with the notebook's split and filter
-│   ├── app.py                 # Streamlit demo (single patient, file upload, whole test set)
+│   ├── app.py                 # Streamlit demo (single patient, file upload)
 │   └── artifacts/             # saved models, test patients, example upload file
 └── report/
     ├── Final_Project_Report.docx / .pdf   # final report
@@ -162,13 +162,13 @@ The analysis lives in one notebook and runs top to bottom in plain, flat cells (
 
 **Q17. What is in the notebook, in order?**
 
-The notebook follows the 10 steps of the course brief. Every step opens with a short markdown explanation, and every code cell is a small ready-to-run snippet with plain comments. There are no functions; the only class is the low-expression filter (Q21).
+The notebook follows the 10 steps of the course brief. Every step opens with a short markdown explanation, and every code cell is a small ready-to-run snippet with plain comments. There are no functions; the only class is the low-expression filter (Q20).
 
 | Step | What it does |
 |---|---|
 | Title, Problem Statement, Setup | group members, the one-line problem and notebook map; imports, plot style, `SEED = 42`, `N_JOBS`, data path, class order |
 | 1. Understanding the dataset | load and join the two files; count records and attributes; numerical vs categorical; classification, not regression |
-| 2. EDA | statistical summary, missing values and duplicates, class and value distributions, gene sparsity, outliers (IQR on log scale) and marker-gene boxplots, PCA and grade table, top-30 gene heatmap, gene-gene correlation, key observations |
+| 2. EDA | statistical summary, missing values and duplicates, class and value distributions, gene sparsity, outliers (IQR on log scale) and marker-gene boxplots, PCA and grade table, key observations |
 | 3. Preprocessing | a table of each decision and why; log2 transform; target encoding |
 | 4. Feature selection | why the filter is unsupervised and re-fitted per fold; the `LowExpressionFilter` class; top genes related to the target (descriptive) |
 | 5. Splitting | 70/10/20 stratified split, class mix per set, genes kept on the full training set |
@@ -187,68 +187,64 @@ The notebook follows the 10 steps of the course brief. Every step opens with a s
 - 20,330 genes for 654 patients (p >> n), so overfitting is the main risk.
 - The values are heavily skewed, so a log transform is needed.
 - IDHwt separates clearly from the IDH-mutant tumours along the first principal component, while the two IDH-mutant classes overlap heavily.
-- The top class-discriminating genes form a clear block: IDHwt is high in CHI3L1, PDPN and EMP3, and the two IDH-mutant classes differ mainly in a few genes.
 - IDHwt is mostly grade 4 (135 of 220 graded), IDHmut-codel has no grade 4, so the classes partly track tumour severity.
 
-**Q20. Why is the top-30-genes heatmap not feature selection?**
-It uses an ANOVA F-score on the *whole* dataset only to describe the data. It is never used to choose features for the models, because that would leak test information. The cell says so.
-
-**Q21. What happens in the preprocessing, filter and split cells (Steps 3 to 5)?**
+**Q20. What happens in the preprocessing, filter and split cells (Steps 3 to 5)?**
 1. `X_log = np.log2(X + 1)`.
 2. First split: 20% test. Second split: from the remaining 80%, take 12.5% (which is 10% of the total) as validation. Both are stratified with `random_state=42`. Result: 457 / 66 / 131 patients.
 3. The filter is a small scikit-learn class, `LowExpressionFilter`, placed as the **first step of every pipeline**. In cross-validation it is re-fitted on the training part of each fold, so held-out folds never influence which genes are kept. Fitted on all 457 training patients it keeps 17,963 genes, and that list is applied to validation and test.
 4. Labels are mapped to integers (IDHwt=0, IDHmut-non-codel=1, IDHmut-codel=2), because XGBoost accepts only integer labels, and all models use the same labels.
 
-**Q22. How are the pipelines built?**
+**Q21. How are the pipelines built?**
 Each model is a scikit-learn `Pipeline` that starts with the gene filter, so the filter, any scaler and PCA are fitted only on the training fold during cross-validation. For example KNN is `LowExpressionFilter -> StandardScaler -> PCA -> KNeighborsClassifier`.
 
-**Q23. How does the tuning loop work?**
+**Q22. How does the tuning loop work?**
 `GridSearchCV(pipeline, grid, cv=cv, scoring="f1_macro", n_jobs=N_JOBS)` tries every combination of the listed values, with 5-fold stratified CV on the training set, and keeps the setting with the best average macro-F1. The best fitted pipeline and its CV score are stored for each model.
 
-**Q24. Why are there no functions, and why is there one class?**
+**Q23. Why are there no functions, and why is there one class?**
 By request: plain top-to-bottom cells so the notebook can be run with Run All; loops and dictionaries are used instead of functions. The one class, `LowExpressionFilter`, is needed because scikit-learn can only re-fit a step inside each cross-validation fold if that step is written as a class with `fit` and `transform`.
 
-**Q25. What is in the evaluation matrix?**
+**Q24. What is in the evaluation matrix?**
 For every model on the test set: accuracy, balanced accuracy, macro precision, macro recall, macro-F1, ROC-AUC (one-vs-rest), PR-AUC, MCC, Cohen's kappa and log-loss.
 
 ---
 
 ## 5. Design decisions and justifications
 
-**Q26. Why log2(x + 1)?**
+**Q25. Why log2(x + 1)?**
 Raw RSEM values span many orders of magnitude, so a few very active genes would dominate any distance- or weight-based model. The log compresses the range and stabilises variance. The `+ 1` keeps zeros defined. It is a fixed transform that learns nothing from the data, so it can safely be applied before the split.
 
-**Q27. Why filter genes expressed in under 20% of patients?**
+**Q26. Why filter genes expressed in under 20% of patients?**
 Genes that are zero for most patients carry almost no information but add noise dimensions in a p >> n problem. The EDA found 183 all-zero and 1,879 mostly-zero genes. The 20% threshold is a judgement call and was not tuned. The filter is a pipeline step, so it is learned from the training part of each cross-validation fold and from the training patients for the final models; nothing leaks from held-out folds, validation or test.
 
-**Q28. Why not select features with ANOVA or similar?**
+**Q27. Why not select features with ANOVA or similar?**
 An earlier version used an ANOVA top-k step. It was replaced by the explicit, unsupervised low-expression filter, which is simpler to explain and cannot leak labels. The models cope with the remaining ~18,000 genes through regularization (L2, tree limits, shrinkage, column subsampling).
 
-**Q29. Why standardise only some models?**
+**Q28. Why standardise only some models?**
 Logistic regression (a penalised linear model) and KNN (distance-based) depend on feature scale. Trees, Random Forest and XGBoost split on thresholds, so scaling does not change them.
 
-**Q30. Why PCA for KNN only?**
+**Q29. Why PCA for KNN only?**
 In ~18,000 dimensions all patients look about equally far apart, so nearest neighbours lose meaning. PCA compresses genes into a few components first (10 or 30, tuned). The other models handle high dimensions on their own.
 
-**Q31. Why a 70/20/10 split?**
+**Q30. Why a 70/20/10 split?**
 It gives a large training set, a large test set for a trustworthy final score, and a small validation set for choosing between models. This also fixes a flaw in the earlier version, where the "best" model was picked using the test set. With only 654 patients, 10% validation is just 66 patients, so the validation choice is noisy (see limitations).
 
-**Q32. Why stratified splits and stratified CV?**
+**Q31. Why stratified splits and stratified CV?**
 So every subset keeps the same class mix. Otherwise a split could by chance contain few IDHmut-codel patients (the smallest class) and give misleading scores.
 
-**Q33. Why cross-validation for tuning, not just the validation set?**
+**Q32. Why cross-validation for tuning, not just the validation set?**
 5-fold CV uses the whole training set for both fitting and scoring, which gives a steadier estimate than one small validation split. The small validation set is kept only for the final choice between models.
 
-**Q34. Why macro-F1 as the main metric?**
+**Q33. Why macro-F1 as the main metric?**
 F1 balances precision and recall; macro-averaging weights the three classes equally. The classes are unequal in size (169 to 256), so plain accuracy could hide poor performance on the smallest class.
 
-**Q35. Why exhaustive grid search and not random search?**
+**Q34. Why exhaustive grid search and not random search?**
 It was requested. With these small grids (5 to 36 combinations per model) an exhaustive search is affordable and fully reproducible. The grid sizes are: Logistic Regression 5, Decision Tree 36, KNN 16, Random Forest 12, XGBoost 32 combinations, each fitted 5 times.
 
-**Q36. Why was logistic regression restricted to L2 (lbfgs)?**
+**Q35. Why was logistic regression restricted to L2 (lbfgs)?**
 L1 with the `saga` solver was extremely slow on ~18,000 standardised genes: a full run did not finish logistic regression in over 15 minutes. `lbfgs` with L2 trains in well under a minute. L2 still gives regularization (shrinkage). The cost is that L1's automatic gene selection is gone.
 
-**Q37. Why these particular models?**
+**Q36. Why these particular models?**
 - **Logistic Regression:** strong, simple baseline for expression data, gives signed gene weights.
 - **Decision Tree:** interpretable, and the natural "weak" model to show what ensembles improve.
 - **KNN:** non-parametric, distance-based contrast to the others.
@@ -256,41 +252,41 @@ L1 with the `saga` solver was extremely slow on ~18,000 standardised genes: a fu
 - **XGBoost:** boosting ensemble, a different ensemble family from bagging.
 The first four were requested, XGBoost was added as a second ensemble technique.
 
-**Q38. Why add XGBoost?**
+**Q37. Why add XGBoost?**
 The assignment needs at least one ensemble method. Random Forest covers bagging. XGBoost adds boosting, the other main family, so the notebook can compare bagging vs boosting and the syllabus topic "Bagging and Boosting" is covered.
 
-**Q39. Why a separate validation step to pick the final model?**
+**Q38. Why a separate validation step to pick the final model?**
 Choosing the winner on the test set lets test information influence the choice, which makes the final score slightly optimistic. With a validation set, the test set stays untouched until the end.
 
-**Q40. Why the bootstrap confidence intervals?**
+**Q39. Why the bootstrap confidence intervals?**
 A test score from 131 patients has real uncertainty: one patient is about 0.8 points of accuracy. Resampling the test patients 1,000 times gives a 95% interval for macro-F1, so you can judge whether two models genuinely differ. If their intervals overlap heavily, the data cannot separate them.
 
-**Q41. Why is the random seed fixed at 42?**
+**Q40. Why is the random seed fixed at 42?**
 So splits, tree-based models and CV folds are reproducible. Results will vary slightly with another seed.
 
-**Q42. Why `n_jobs=1` inside the Random Forest and XGBoost, but `n_jobs=-1` in the search?**
+**Q41. Why `n_jobs=1` inside the Random Forest and XGBoost, but `n_jobs=-1` in the search?**
 Parallelism is taken at one level only (the search runs many fits at once). Parallel models inside parallel workers would oversubscribe the CPU.
 
 ---
 
 ## 6. The models: how each works
 
-**Q43. How does Logistic Regression work here?**
+**Q42. How does Logistic Regression work here?**
 It gives each gene a weight and combines them into a score per class, turned into probabilities with softmax. It is fitted by minimising log-loss plus an **L2 penalty** that shrinks weights toward zero. `C` is the *inverse* of the penalty strength (small C = stronger shrinkage). Tuned: `C` in {1e-4, 1e-3, 1e-2, 0.1, 1}. Strength: simple, fast, well suited when many genes shift consistently. Weakness: assumes a roughly linear boundary.
 
-**Q44. How does a Decision Tree work, and how is it regularised?**
+**Q43. How does a Decision Tree work, and how is it regularised?**
 It asks a chain of yes/no questions about single genes (`gene > threshold?`) and picks the split that best separates the classes (gini impurity). Left alone it grows until it memorises the training data. Regularization: `max_depth`, `min_samples_leaf` and cost-complexity pruning `ccp_alpha`. Tuned: depth {3,5,8,None}, leaf {1,5,15}, alpha {0,0.005,0.02}. Weakness: high variance.
 
-**Q45. How does KNN work?**
+**Q44. How does KNN work?**
 For a new patient it finds the `k` most similar training patients (in PCA space) and takes a majority vote, optionally weighted by distance. Small `k` is flexible but noisy (overfits), large `k` is smooth but can blur classes. Tuned: PCA components {10,30}, `n_neighbors` {3,7,15,25}, weights {uniform, distance}.
 
-**Q46. How does Random Forest work?**
+**Q45. How does Random Forest work?**
 It grows many trees, each on a bootstrap resample of the patients and using a random subset of genes at every split, then averages their votes. Averaging de-correlated trees reduces variance without increasing bias much. Regularization comes from the averaging, `max_features` and `min_samples_leaf`. Tuned: trees {200,500}, `max_features` {sqrt, 0.2}, leaf {1,3,8}. It is **bagging**: trees are built independently.
 
-**Q47. How does XGBoost work?**
+**Q46. How does XGBoost work?**
 It is **gradient boosting**: trees are built one after another, and each new small tree is fitted to the errors (the gradient of the log-loss) of the model so far. The predictions of all trees are added up, scaled by the learning rate. This mainly reduces *bias*. Regularization: shallow trees (`max_depth`), small `learning_rate`, L2 penalty `reg_lambda`, column subsampling `colsample_bytree` and row subsampling (`subsample=0.8`). Tuned: trees {100,300}, depth {2,4}, learning rate {0.05,0.2}, colsample {0.2,0.5}, lambda {1,10}. Fixed: `multi:softprob`, `hist` tree method, `mlogloss`.
 
-**Q48. Bagging vs boosting?**
+**Q47. Bagging vs boosting?**
 | | Bagging (Random Forest) | Boosting (XGBoost) |
 |---|---|---|
 | Trees built | independently, in parallel | sequentially, each fixing the last |
@@ -298,14 +294,14 @@ It is **gradient boosting**: trees are built one after another, and each new sma
 | Tree depth | deep, even fully grown | shallow |
 | Overfitting risk | low | higher if too many trees or a large learning rate |
 
-**Q49. Why can a single Decision Tree be worse than a forest?**
+**Q48. Why can a single Decision Tree be worse than a forest?**
 One tree is unstable: small changes in the training patients change the splits. Averaging many different trees cancels those individual mistakes.
 
 ---
 
 ## 7. Evaluation metrics
 
-**Q50. What does each metric mean?**
+**Q49. What does each metric mean?**
 - **Accuracy:** share of patients classified correctly. Misleading if classes are unequal.
 - **Balanced accuracy:** average recall per class.
 - **Precision (per class):** of the patients predicted as this class, how many truly are.
@@ -319,33 +315,33 @@ One tree is unstable: small changes in the training patients change the splits. 
 - **Confusion matrix:** rows are true classes, columns are predictions; off-diagonal cells are the mistakes.
 - **Bootstrap 95% CI:** the range of macro-F1 you would expect if the test set were drawn again.
 
-**Q51. Which metric picks the winner?**
+**Q50. Which metric picks the winner?**
 Validation macro-F1 selects the final model. Test macro-F1 (with its CI) reports how good it is.
 
 ---
 
 ## 8. Overfitting, underfitting, bias-variance
 
-**Q52. How do we detect overfitting?**
+**Q51. How do we detect overfitting?**
 By comparing scores on data the model trained on with data it did not see: the **train-test accuracy gap** and the gap between cross-validated and test scores. A model that memorises the training patients scores near 100% there but worse on new ones.
 
-**Q53. How do we detect underfitting?**
+**Q52. How do we detect underfitting?**
 Low scores on both training and held-out data. Strong regularization (very small `C`, very shallow trees) can cause it. In our run all models scored well on unseen patients (test macro-F1 0.93-0.98), so none clearly underfit.
 
-**Q54. What controls overfitting in this project?**
+**Q53. What controls overfitting in this project?**
 The low-expression filter, L2 penalty, tree depth and pruning, KNN neighbourhood size and PCA, forest averaging, XGBoost's learning rate / depth / lambda / subsampling, and honest evaluation (CV, validation and test sets).
 
-**Q55. What is the bias-variance trade-off here?**
+**Q54. What is the bias-variance trade-off here?**
 A flexible model (deep tree, KNN with k=3) has low bias but high variance: it fits the training noise. A rigid model (very strong penalty) has high bias. Bagging reduces variance; boosting reduces bias. Tuning on cross-validated macro-F1 looks for the balance.
 
-**Q56. Does 100% training accuracy always mean overfitting?**
+**Q55. Does 100% training accuracy always mean overfitting?**
 No. A random forest grows trees to fit the training data, so near-100% training accuracy is normal for it. The train-test gap is the more meaningful number.
 
 ---
 
 ## 9. Results
 
-**Q57. What are the results?**
+**Q56. What are the results?**
 Split: 457 train / 66 validation / 131 test patients. Hyperparameters were tuned by 5-fold CV on the training set. On the validation set Logistic Regression, Random Forest and XGBoost tied (macro-F1 0.986 each; Decision Tree 0.928, KNN 0.915). The notebook keeps the first model in its list when scores tie, so the selected model is **Logistic Regression**, the simplest of the three. Test results:
 
 | Model | CV macro-F1 | Test acc | Test macro-F1 (95% CI) | ROC-AUC | MCC | Log-loss | Gap |
@@ -360,7 +356,7 @@ Best settings: LR `C`=0.001; Decision Tree depth 3, leaf 15, no pruning; KNN 10 
 
 Errors out of 131 test patients: Logistic Regression 2, Random Forest 3, XGBoost 4, Decision Tree 7, KNN 9. The selected Logistic Regression's two errors are both IDHmut-non-codel tumours predicted as IDHmut-codel (TCGA-CS-5394, grade 3; TCGA-HT-8113, grade 2, which histology recorded as an oligodendroglioma). It classified every IDHwt and every IDHmut-codel test patient correctly. Every model except KNN classified all 34 IDHmut-codel test patients correctly.
 
-**Q58. What do the results tell us?**
+**Q57. What do the results tell us?**
 - Logistic Regression, Random Forest and XGBoost are tied within noise (overlapping CIs; one patient is about 0.8 points).
 - **Bagging vs single tree:** Random Forest beats the Decision Tree (test macro-F1 0.978 vs 0.949; CV 0.985 vs 0.931).
 - **Boosting vs bagging:** XGBoost had the best CV score and ROC-AUC but a slightly lower test macro-F1 than Random Forest (0.970 vs 0.978). No measurable gain from boosting here.
@@ -368,20 +364,20 @@ Errors out of 131 test patients: Logistic Regression 2, Random Forest 3, XGBoost
 - The 66-patient validation set could not separate the top three models, which shows how noisy a small validation set is.
 - Log-loss separates models more than accuracy: the tree and KNN give overconfident probabilities.
 
-**Q59. If two models tie, how do we choose?**
+**Q58. If two models tie, how do we choose?**
 Honestly: say they tie. Statistics cannot separate them at this sample size. Our tie-breaker is parsimony: logistic regression is simpler, faster and more interpretable than a forest, so it comes first in the model list and wins ties. It was chosen on the validation set before the test set was opened, and it also happened to have the highest test macro-F1.
 
-**Q60. Why are the scores so high? Is it too good to be true?**
+**Q59. Why are the scores so high? Is it too good to be true?**
 IDH-mutant tumours have a strong, well-known expression signature, so the 3-way split is relatively easy. The test set is small and from one cohort, so the scores should not be read as proof of generalisation to other hospitals. Part of what is learned may also be tumour grade, since IDHwt is mostly grade 4.
 
-**Q61. What do the top genes mean?**
+**Q60. What do the top genes mean?**
 The Random Forest importance plot lists, in order: RBP1, KIAA0495, PSMB2, FBXO42, FKBP9, MIER1, EMP3, FBXO17, LRRC41, CSDE1. We looked up their chromosome locations (NCBI Gene): six lie on 1p (KIAA0495/GFOD3P 1p36.32, PSMB2 1p34.3, FBXO42 1p36.13, MIER1 1p31.3, LRRC41 1p33, CSDE1 1p13.2) and two on 19q (EMP3 19q13.33, FBXO17 19q13.2), so 8 of the 10 sit on the arms lost in the 1p/19q codeletion. RBP1 (3q23) is known to be silenced by DNA hypermethylation in IDH-mutant gliomas (Chou et al., JNCI 2012). The pattern is consistent with the biological effects of 1p/19q codeletion, but importances do not prove biological mechanism, they are biased toward high-variance genes, and correlated genes split credit between them. The Random Forest is used for this check because the selected Logistic Regression spreads small weights over thousands of correlated genes, which makes its coefficients harder to read.
 
 ---
 
 ## 10. Limitations, and what the synopsis planned but we did not do
 
-**Q62. What are the limitations?**
+**Q61. What are the limitations?**
 - About 650 patients from a single TCGA cohort, one split, no external validation.
 - 320 of the 974 labelled patients have no expression profile (possible selection bias).
 - No batch or tissue-source correction.
@@ -391,14 +387,14 @@ The Random Forest importance plot lists, in order: RBP1, KIAA0495, PSMB2, FBXO42
 - The 20% filter threshold was not tuned.
 - Research exercise only, not a validated diagnostic tool.
 
-**Q63. What did the project synopsis propose that is not in the notebook?**
+**Q62. What did the project synopsis propose that is not in the notebook?**
 - Models: linear SVM, RBF SVM, soft voting.
 - Features: chromosome-arm scores (39), pathway scores from Hallmark and Verhaak gene sets (54), age and sex.
 - Methods: random search with nested cross-validation, SHAP explanations, calibration, MCC/kappa significance tests (corrected t-test, McNemar), an 80/20 split, gene-name mapping through NCBI Gene.
 - Class names: the synopsis calls the classes glioblastoma / astrocytoma / oligodendroglioma; the notebook uses the molecular names (IDHwt / IDHmut-non-codel / IDHmut-codel).
 The project was deliberately simplified to two datasets and a flat notebook. These items are listed as next steps.
 
-**Q64. What would improve the project most?**
+**Q63. What would improve the project most?**
 An independent test cohort; wider tuning ranges; repeated cross-validation; adding SVMs.
 
 ---
@@ -421,46 +417,46 @@ An independent test cohort; wider tuning ranges; repeated cross-validation; addi
 
 ## 12. Viva-style rapid-fire questions
 
-**Q65. Why not use accuracy only?** Classes are unequal; macro-F1 and balanced accuracy weigh each class equally.
-**Q66. What is p >> n and why is it dangerous?** More features (20,330) than samples (654). Models can fit noise perfectly, so they overfit.
-**Q67. What is data leakage and how did you avoid it?** Information from test data influencing training. We split first, and put the gene filter, scalers and PCA inside the pipelines so they are re-fitted on the training part of every fold.
-**Q68. Why not do the log transform after splitting?** It is a fixed formula with no learned parameters, so it cannot leak.
-**Q69. What is the difference between validation and test sets?** Validation chooses the model; test is used once for the final unbiased score.
-**Q70. Why is KNN usually worst here?** Distances in high dimensions are weak, and its best `k` is very small, which makes it noisy and prone to overfitting.
-**Q71. What does L2 regularization do?** Adds the sum of squared weights to the loss, shrinking weights and so reducing variance.
-**Q72. L1 vs L2?** L1 can set weights exactly to zero (feature selection); L2 shrinks all weights but keeps them non-zero.
-**Q73. What does `C` mean?** Inverse regularization strength: smaller `C` means a stronger penalty.
-**Q74. What is gini impurity?** A measure of how mixed the classes are in a node. 0 means pure.
-**Q75. What is out-of-bag / bootstrap sampling?** Drawing patients with replacement. About a third of patients are left out of each tree's sample.
-**Q76. Why does XGBoost need integer labels?** Its scikit-learn wrapper rejects strings, so classes are encoded 0/1/2 and the names are restored for plots.
-**Q77. What is PCA?** A linear projection onto directions of maximum variance. PC1 here separates IDHwt from IDH-mutant tumours.
-**Q78. What is stratification?** Keeping the same class proportions in each split or fold.
-**Q79. What is a confusion matrix?** A table of true vs predicted classes; the diagonal holds correct predictions.
-**Q80. What is ROC-AUC?** The probability that a random positive is ranked above a random negative. 0.5 is chance, 1.0 is perfect.
-**Q81. How would you improve it?** External validation, wider tuning ranges, repeated or nested CV, SVMs.
-**Q82. Can this be used clinically?** No. It is a research exercise on one retrospective cohort and is not validated for diagnosis.
+**Q64. Why not use accuracy only?** Classes are unequal; macro-F1 and balanced accuracy weigh each class equally.
+**Q65. What is p >> n and why is it dangerous?** More features (20,330) than samples (654). Models can fit noise perfectly, so they overfit.
+**Q66. What is data leakage and how did you avoid it?** Information from test data influencing training. We split first, and put the gene filter, scalers and PCA inside the pipelines so they are re-fitted on the training part of every fold.
+**Q67. Why not do the log transform after splitting?** It is a fixed formula with no learned parameters, so it cannot leak.
+**Q68. What is the difference between validation and test sets?** Validation chooses the model; test is used once for the final unbiased score.
+**Q69. Why is KNN usually worst here?** Distances in high dimensions are weak, and its best `k` is very small, which makes it noisy and prone to overfitting.
+**Q70. What does L2 regularization do?** Adds the sum of squared weights to the loss, shrinking weights and so reducing variance.
+**Q71. L1 vs L2?** L1 can set weights exactly to zero (feature selection); L2 shrinks all weights but keeps them non-zero.
+**Q72. What does `C` mean?** Inverse regularization strength: smaller `C` means a stronger penalty.
+**Q73. What is gini impurity?** A measure of how mixed the classes are in a node. 0 means pure.
+**Q74. What is out-of-bag / bootstrap sampling?** Drawing patients with replacement. About a third of patients are left out of each tree's sample.
+**Q75. Why does XGBoost need integer labels?** Its scikit-learn wrapper rejects strings, so classes are encoded 0/1/2 and the names are restored for plots.
+**Q76. What is PCA?** A linear projection onto directions of maximum variance. PC1 here separates IDHwt from IDH-mutant tumours.
+**Q77. What is stratification?** Keeping the same class proportions in each split or fold.
+**Q78. What is a confusion matrix?** A table of true vs predicted classes; the diagonal holds correct predictions.
+**Q79. What is ROC-AUC?** The probability that a random positive is ranked above a random negative. 0.5 is chance, 1.0 is perfect.
+**Q80. How would you improve it?** External validation, wider tuning ranges, repeated or nested CV, SVMs.
+**Q81. Can this be used clinically?** No. It is a research exercise on one retrospective cohort and is not validated for diagnosis.
 
 ---
 
 ## 13. How to run and troubleshooting
 
-**Q83. How do I run the project?**
+**Q82. How do I run the project?**
 1. `pip install -r requirements.txt` (or use the existing virtual environment, which already has the packages).
 2. Open `glioma_analysis.ipynb` and **Run All**. Run it from the repository root folder, because the data path is `data/raw/`.
 3. Demo app: `python app/train_models.py`, then `python -m streamlit run app/app.py`.
 
-**Q84. How long does it take?**
+**Q83. How long does it take?**
 The cross-validated searches dominate. The final run took about 82 minutes with `N_JOBS = 6` on an 8-core laptop; the XGBoost search (160 fits) took about an hour of that. Each parallel worker needs about 1 GB of memory, so lower `N_JOBS` in the Setup cell if memory runs out.
 
-**Q85. Why is the GPU not used?**
+**Q84. Why is the GPU not used?**
 scikit-learn runs on the CPU only, and at this data size (a few hundred patients) a GPU would help little. XGBoost can use a GPU, but it is kept on the CPU so the notebook and the demo app give identical numbers.
 
-**Q86. Problems met while building, and the fixes**
+**Q85. Problems met while building, and the fixes**
 - Logistic regression with L1 and the `saga` solver never finished: switched to L2 with `lbfgs`.
 - XGBoost rejected string labels: labels are encoded as integers 0/1/2 for all models.
 - Silent notebook failures came from a bug in the build script, not from the models.
 - Parallel runs oversubscribed the CPU: worker math threads are pinned to one with `OMP_NUM_THREADS=1`.
 - Runs with too many parallel workers ran out of memory: the number of workers is now one setting, `N_JOBS`.
 
-**Q87. Where are the processed datasets?**
+**Q86. Where are the processed datasets?**
 There are none. The joined and filtered tables exist only in memory while the notebook runs, and `data/processed/` is empty. A cell can be added to save them as CSV or parquet if needed.

@@ -48,7 +48,7 @@ with st.sidebar:
     st.metric("Held-out test macro-F1", f"{s['test_macro_f1']:.3f}")
     st.caption(f"{len(genes):,} genes used · 131 unseen test patients")
 
-tab_one, tab_upload, tab_all = st.tabs(["Single test patient", "Upload expression file", "Whole test set"])
+tab_one, tab_upload = st.tabs(["Single test patient", "Upload expression file"])
 
 
 def show_prediction(row_log: pd.DataFrame, true_label=None):
@@ -98,17 +98,3 @@ with tab_upload:
         out.insert(0, "prediction", [classes[i] for i in proba.argmax(1)])
         st.dataframe(out, use_container_width=True)
         st.download_button("Download predictions", out.to_csv().encode(), "predictions.csv", "text/csv")
-
-with tab_all:
-    m = models[model_name]
-    pred = [classes[i] for i in m.predict(test[genes])]
-    cm = pd.crosstab(pd.Series(test["true_label"].values, name="True"), pd.Series(pred, name="Predicted"))
-    cm = cm.reindex(index=classes, columns=classes, fill_value=0)
-    acc = float(np.mean(np.array(pred) == test["true_label"].values))
-    st.metric("Accuracy on the 131 test patients", f"{acc:.3f}")
-    st.write("Confusion matrix (rows = lab-confirmed class, columns = model prediction)")
-    st.dataframe(cm, use_container_width=True)
-    wrong = test.loc[np.array(pred) != test["true_label"].values, ["true_label", "grade"]].assign(
-        predicted=[p for p, t in zip(pred, test["true_label"]) if p != t])
-    st.write(f"Misclassified patients: {len(wrong)}")
-    st.dataframe(wrong, use_container_width=True)
